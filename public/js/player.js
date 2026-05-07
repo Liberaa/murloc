@@ -55,6 +55,7 @@ const Player = (() => {
       // Talent points spent: { talentId: rank }
       talentsLearned: {},
       talentPoints: 0,
+      lastLevelGains: null,
       // Quest progress
       activeQuests: [],
       completedQuests: [],
@@ -109,9 +110,11 @@ const Player = (() => {
   function gainXP(amount) {
     state.xp += amount;
     let leveled = false;
+    state.lastLevelGains = null;
     while (state.xp >= state.xpToNext) {
       state.xp -= state.xpToNext;
-      levelUp();
+      const gains = levelUp();
+      state.lastLevelGains = mergeLevelGains(state.lastLevelGains, gains);
       leveled = true;
     }
     return leveled;
@@ -131,7 +134,19 @@ const Player = (() => {
     state.hp = Math.min(state.hp + Math.floor(g.hp * 2), totalStat('maxHp'));
     state.mp = Math.min(state.mp + Math.floor(g.mp * 2), totalStat('maxMp'));
     state.xpToNext = Math.floor(state.xpToNext * 1.4);
-    return { hp: Math.floor(g.hp), mp: Math.floor(g.mp), atk: Math.floor(g.atk), def: Math.floor(g.def) };
+    const gold = 50 + state.level * 25;
+    state.gold += gold;
+    return { hp: Math.floor(g.hp), mp: Math.floor(g.mp), atk: Math.floor(g.atk), def: Math.floor(g.def), gold };
+  }
+
+  function mergeLevelGains(total, gains) {
+    if (!total) return { ...gains };
+    Object.entries(gains).forEach(([k, v]) => { total[k] = (total[k] || 0) + v; });
+    return total;
+  }
+
+  function getLastLevelGains() {
+    return state?.lastLevelGains || null;
   }
 
   function addToInventory(itemId, qty=1) {
@@ -252,7 +267,7 @@ const Player = (() => {
   function toSave() { return JSON.stringify(state); }
   function fromSave(json) { state = JSON.parse(json); }
 
-  return { create, get, set, totalStat, getGearBonus, gainXP, levelUp, addToInventory,
+  return { create, get, set, totalStat, getGearBonus, gainXP, levelUp, getLastLevelGains, addToInventory,
            removeFromInventory, hasItem, equipItem, unequipItem, learnTalent,
            recordKill, checkQuestComplete, completeQuest, acceptQuest, fullHeal,
            toSave, fromSave };

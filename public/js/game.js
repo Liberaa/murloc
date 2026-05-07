@@ -89,7 +89,7 @@ const Game = (() => {
     // Level up notification
     if (result.leveled) {
       setTimeout(() => {
-        UI.showLevelUp(p.level, { hp: 18, mp: 14, atk: 2, def: 1 });
+        UI.showLevelUp(p.level, Player.getLastLevelGains() || { hp: 18, mp: 14, atk: 2, def: 1, gold: 0 });
       }, 200);
     }
 

@@ -14,7 +14,7 @@ const ITEMS = {
   champions_blade:  { id:'champions_blade',  name:"Champion's Blade", icon:'⚔️',  type:'weapon',  slot:'weapon',  quality:'rare',     value:250, stats:{atk:35, str:5},    desc:'Wielded by arena champions.', class:['warrior'] },
   iron_shield:      { id:'iron_shield',      name:'Iron Shield',      icon:'🛡️',  type:'armor',   slot:'offhand', quality:'common',   value:25,  stats:{def:6},            desc:'Solid iron protection.',      class:['warrior'] },
   tower_shield:     { id:'tower_shield',     name:'Tower Shield',     icon:'🛡️',  type:'armor',   slot:'offhand', quality:'uncommon', value:80,  stats:{def:14},           desc:'Massive defensive tower.',    class:['warrior'] },
-  chain_mail:       { id:'chain_mail',       name:'Chain Mail',       icon:'🧥',  type:'armor',   slot:'chest',   quality:'common',   value:40,  stats:{def:10, hp:20},    desc:'Interlocked iron rings.',     class:['warrior'] },
+  chain_mail:       { id:'chain_mail',       name:'Chain Mail',       icon:'🧥',  type:'armor',   slot:'chest',   quality:'common',   value:40,  stats:{def:10, hp:20},    desc:'Interlocked iron rings.' },
   plate_armor:      { id:'plate_armor',      name:'Plate Armor',      icon:'🦺',  type:'armor',   slot:'chest',   quality:'uncommon', value:120, stats:{def:22, hp:40},    desc:'Heavy battle plate.',         class:['warrior'] },
   iron_helm:        { id:'iron_helm',        name:'Iron Helm',        icon:'⛑️',  type:'armor',   slot:'head',    quality:'common',   value:20,  stats:{def:5},            desc:'Protects the skull.',         class:['warrior'] },
 
@@ -70,4 +70,44 @@ const ITEMS = {
   leviathan_charm:       { id:'leviathan_charm',       name:'Leviathan Charm',       icon:'L', type:'armor', slot:'neck', quality:'rare', value:320, stats:{atk:16, def:16, hp:90}, desc:'A tooth from something that swallowed ships.' },
   pearl_of_focus:        { id:'pearl_of_focus',        name:'Pearl of Focus',        icon:'O', type:'armor', slot:'offhand', quality:'rare', value:300, stats:{int:24, mp:85, crit:7}, desc:'A perfect pearl used to focus spellcraft.', class:['mage'] },
   tidewalker_boots:      { id:'tidewalker_boots',      name:'Tidewalker Boots',      icon:'B', type:'armor', slot:'feet', quality:'rare', value:255, stats:{agi:18, def:10, hp:40}, desc:'Sure footing, even on slick stone.' },
+
+  // Westfall Hollow boss rewards
+  moonlit_cloak:         { id:'moonlit_cloak',         name:'Moonlit Cloak',         icon:'C', type:'armor', slot:'neck', quality:'rare', value:180, stats:{def:9, agi:8, mp:25}, desc:'A cloak that glows softly under moonlight.' },
+  hollowthorn_ring:      { id:'hollowthorn_ring',      name:'Hollowthorn Ring',      icon:'R', type:'armor', slot:'ring', quality:'rare', value:190, stats:{atk:7, def:6, hp:35}, desc:'A thorny silver ring from the old hollow.' },
+  eclipse_blade:         { id:'eclipse_blade',         name:'Eclipse Blade',         icon:'E', type:'weapon', slot:'weapon', quality:'epic', value:360, stats:{atk:38, agi:12, crit:8}, desc:'A black-edged blade bright along one side.', class:['warrior','rogue'] },
+  moonwell_scepter:      { id:'moonwell_scepter',      name:'Moonwell Scepter',      icon:'M', type:'weapon', slot:'weapon', quality:'epic', value:360, stats:{atk:8, int:36, mp:60, crit:6}, desc:'A scepter filled with pale lunar water.', class:['mage'] },
+  starfall_crown:        { id:'starfall_crown',        name:'Starfall Crown',        icon:'L', type:'armor', slot:'head', quality:'legendary', value:700, stats:{atk:14, def:14, int:18, agi:14, hp:90, mp:90, crit:10}, desc:'A legendary crown set with a fallen star.' },
+
+  // Epic boss armor and accessories
+  violet_warplate:       { id:'violet_warplate',       name:'Violet Warplate',       icon:'P', type:'armor', slot:'chest', quality:'epic', value:520, stats:{def:30, atk:12, hp:120}, desc:'Purple plate polished with boss blood.' },
+  spellstorm_robes:      { id:'spellstorm_robes',      name:'Spellstorm Robes',      icon:'R', type:'armor', slot:'chest', quality:'epic', value:520, stats:{def:16, int:34, mp:140, crit:8}, desc:'Robes that crackle when a boss gets nervous.', class:['mage'] },
+  nightlord_wraps:       { id:'nightlord_wraps',       name:'Nightlord Wraps',       icon:'W', type:'armor', slot:'hands', quality:'epic', value:430, stats:{atk:14, agi:18, crit:10}, desc:'Soft gloves for extremely loud backstabs.' },
+  archon_grips:          { id:'archon_grips',          name:'Archon Grips',          icon:'G', type:'armor', slot:'hands', quality:'epic', value:440, stats:{def:14, int:18, mp:55}, desc:'Gloves that hold spell power like a clenched fist.' },
+  umbral_cloak:          { id:'umbral_cloak',          name:'Umbral Cloak',          icon:'U', type:'armor', slot:'neck', quality:'epic', value:470, stats:{def:18, agi:14, hp:80, crit:6}, desc:'A cloak that drinks nearby torchlight.' },
+  royal_boss_chain:      { id:'royal_boss_chain',      name:'Royal Boss Chain',      icon:'N', type:'armor', slot:'neck', quality:'epic', value:500, stats:{atk:16, int:16, hp:90, mp:70}, desc:'A neckpiece taken from someone too important.' },
+  violet_signet:         { id:'violet_signet',         name:'Violet Signet',         icon:'V', type:'armor', slot:'ring', quality:'epic', value:460, stats:{atk:10, def:10, int:10, agi:10, crit:8}, desc:'A signet stamped with a tiny angry crown.' },
+  astral_treads:         { id:'astral_treads',         name:'Astral Treads',         icon:'A', type:'armor', slot:'feet', quality:'epic', value:420, stats:{agi:20, def:12, mp:55}, desc:'Boots that step half an inch above reality.' },
+  voidbound_orb:         { id:'voidbound_orb',         name:'Voidbound Orb',         icon:'O', type:'armor', slot:'offhand', quality:'epic', value:540, stats:{int:32, mp:120, crit:12}, desc:'A purple orb that whispers winning numbers.', class:['mage'] },
+
+  // Starter hub epic vendor gear
+  adventurer_kingsword:  { id:'adventurer_kingsword',  name:'Adventurer Kingsword',  icon:'K', type:'weapon', slot:'weapon', quality:'epic', value:210, stats:{atk:26, def:6, hp:45}, desc:'A flashy sword sold to heroes with excellent taste.', class:['warrior'] },
+  violet_apprentice_staff:{ id:'violet_apprentice_staff', name:'Violet Apprentice Staff', icon:'A', type:'weapon', slot:'weapon', quality:'epic', value:210, stats:{atk:7, int:30, mp:85, crit:6}, desc:'A beginner staff with suspiciously advanced power.', class:['mage'] },
+  lucky_shadow_daggers:  { id:'lucky_shadow_daggers',  name:'Lucky Shadow Daggers', icon:'D', type:'weapon', slot:'weapon', quality:'epic', value:205, stats:{atk:24, agi:18, crit:10}, desc:'Twin daggers that seem to find weak spots by themselves.', class:['rogue'] },
+  violet_hero_chest:    { id:'violet_hero_chest',    name:'Violet Hero Chestguard', icon:'C', type:'armor', slot:'chest', quality:'epic', value:200, stats:{def:24, hp:90, atk:8}, desc:'A chestguard that makes level-one confidence look reasonable.' },
+  quicksilver_gloves:    { id:'quicksilver_gloves',    name:'Quicksilver Gloves',    icon:'Q', type:'armor', slot:'hands', quality:'epic', value:185, stats:{atk:9, agi:12, crit:6}, desc:'Fast gloves for fast decisions.' },
+  brightstar_charm:      { id:'brightstar_charm',      name:'Brightstar Charm',      icon:'B', type:'armor', slot:'neck', quality:'epic', value:195, stats:{int:14, def:8, hp:55, mp:55}, desc:'A charm that shines brighter when danger gets closer.' },
+  ridiculous_godstaff:   { id:'ridiculous_godstaff',   name:'Ridiculous Godstaff',   icon:'X', type:'weapon', slot:'weapon', quality:'legendary', value:5000, stats:{atk:100, int:7000, mp:5000, crit:100}, desc:'For testing. Frostbolt goes from spell to weather event.', class:['mage'] },
+
+  // Boss-only OP staffs
+  staff_of_unfair_sparks: { id:'staff_of_unfair_sparks', name:'Staff of Unfair Sparks', icon:'S', type:'weapon', slot:'weapon', quality:'epic', value:900, stats:{atk:20, int:95, mp:180, crit:18}, desc:'Absolutely not balanced. Beautifully so.', class:['mage'] },
+  staff_of_boss_tears:    { id:'staff_of_boss_tears',    name:'Staff of Boss Tears',    icon:'T', type:'weapon', slot:'weapon', quality:'legendary', value:1600, stats:{atk:28, int:145, mp:280, crit:25}, desc:'Every boss in the valley hates this staff.', class:['mage'] },
+  worldroot_archstaff:    { id:'worldroot_archstaff',    name:'Worldroot Archstaff',    icon:'W', type:'weapon', slot:'weapon', quality:'legendary', value:2200, stats:{atk:35, int:190, mp:420, hp:160, crit:35}, desc:'A ridiculous archstaff grown from the root of the world.', class:['mage'] },
+
+  // Level 20 boss-zone rewards
+  titanbreaker_greatstaff:{ id:'titanbreaker_greatstaff', name:'Titanbreaker Greatstaff', icon:'T', type:'weapon', slot:'weapon', quality:'legendary', value:4200, stats:{atk:55, int:310, mp:650, hp:250, crit:45}, desc:'A huge staff built to crack titan armor.', class:['mage'] },
+  crown_of_twenty_kings: { id:'crown_of_twenty_kings', name:'Crown of Twenty Kings', icon:'C', type:'armor', slot:'head', quality:'legendary', value:3600, stats:{atk:32, def:32, int:36, agi:32, hp:220, mp:220, crit:22}, desc:'A crown with one tiny tyrant for every level.' },
+  mythic_heartplate:     { id:'mythic_heartplate',     name:'Mythic Heartplate', icon:'H', type:'armor', slot:'chest', quality:'legendary', value:3300, stats:{def:58, atk:28, hp:320, crit:10}, desc:'The armor still beats like a boss heart.' },
+  stormgod_handwraps:    { id:'stormgod_handwraps',    name:'Stormgod Handwraps', icon:'S', type:'armor', slot:'hands', quality:'legendary', value:3000, stats:{atk:30, int:30, agi:22, mp:160, crit:18}, desc:'Wraps that make every spell feel overcharged.' },
+  eternity_chain:        { id:'eternity_chain',        name:'Eternity Chain', icon:'E', type:'armor', slot:'neck', quality:'legendary', value:3100, stats:{atk:24, def:24, int:28, hp:220, mp:220, crit:14}, desc:'A chain that has already survived tomorrow.' },
+  mythic_star_signet:    { id:'mythic_star_signet',    name:'Mythic Star Signet', icon:'R', type:'armor', slot:'ring', quality:'legendary', value:2950, stats:{atk:18, def:18, int:22, agi:18, crit:20}, desc:'A ring bright enough to count as a strategy.' },
 };

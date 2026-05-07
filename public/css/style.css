@@ -621,6 +621,7 @@ body {
 .item-quality-uncommon { border-color: #44cc44; }
 .item-quality-rare { border-color: #4488ff; }
 .item-quality-epic { border-color: #aa44ff; }
+.item-quality-legendary { border-color: #ff9d00; box-shadow: inset 0 0 12px rgba(255,157,0,0.25); }
 .item-tooltip {
   position: fixed;
   background: rgba(5,3,1,0.97);
@@ -641,6 +642,7 @@ body {
 .rarity-uncommon { color: #44cc44; }
 .rarity-rare { color: #4488ff; }
 .rarity-epic { color: #aa44ff; }
+.rarity-legendary { color: #ff9d00; text-shadow: 0 0 8px rgba(255,157,0,0.45); }
 .inventory-footer { padding: 10px 16px; border-top: 1px solid var(--brown-border); font-size: 14px; }
 
 /* ===== TALENTS ===== */

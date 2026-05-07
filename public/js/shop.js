@@ -24,22 +24,34 @@ const Shop = (() => {
     shop.items.forEach(itemId => {
       const item = ITEMS[itemId];
       if (!item) return;
+
       const canAfford = p.gold >= item.value;
       const wrongClass = item.class && !item.class.includes(p.spec);
+      const classText = wrongClass ? `Requires ${formatClasses(item.class)}` : '';
 
       const div = document.createElement('div');
-      div.className = 'shop-item' + (canAfford ? '' : ' cant-afford');
+      div.className = 'shop-item' + (canAfford && !wrongClass ? '' : ' cant-afford');
       div.title = item.desc || '';
       div.innerHTML = `
         <div class="shop-item-icon">${item.icon}</div>
         <div class="shop-item-name ${getRarityClass(item.quality)}">${item.name}</div>
         ${item.stats ? `<div class="shop-item-stats">${formatStats(item.stats)}</div>` : ''}
-        ${wrongClass ? `<div style="color:#cc4444;font-size:11px;">${p.spec} only ✗</div>` : ''}
-        <div class="shop-item-price"><span class="gold-icon">●</span> ${item.value}</div>
+        ${wrongClass ? `<div style="color:#cc4444;font-size:11px;">${classText}</div>` : ''}
+        <div class="shop-item-price"><span class="gold-icon">o</span> ${item.value}</div>
       `;
-      if (canAfford && !wrongClass) {
-        div.addEventListener('click', () => buyItem(itemId));
-      }
+
+      div.addEventListener('click', () => {
+        if (!canAfford) {
+          UI.toast(`Need ${item.value - p.gold} more gold for ${item.name}.`);
+          return;
+        }
+        if (wrongClass) {
+          UI.toast(`${item.name}: ${classText}.`);
+          return;
+        }
+        buyItem(itemId);
+      });
+
       container.appendChild(div);
     });
   }
@@ -48,7 +60,7 @@ const Shop = (() => {
     const p = Player.get();
     const item = ITEMS[itemId];
     if (!item) return;
-    if (p.gold < item.value) { UI.toast("Not enough gold!"); return; }
+    if (p.gold < item.value) { UI.toast('Not enough gold!'); return; }
     p.gold -= item.value;
     Player.addToInventory(itemId);
     UI.toast(`Purchased ${item.name}!`);
@@ -64,6 +76,12 @@ const Shop = (() => {
     return Object.entries(stats)
       .map(([k, v]) => `+${v} ${k.toUpperCase()}`)
       .join(' ');
+  }
+
+  function formatClasses(classes) {
+    return classes
+      .map(c => c.charAt(0).toUpperCase() + c.slice(1))
+      .join(' or ');
   }
 
   return { open };

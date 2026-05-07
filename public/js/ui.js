@@ -338,6 +338,55 @@ const UI = (() => {
     });
   }
 
+  // ===== QUEST NPC STATE =====
+  function getNpcQuestState(npc) {
+    const p = Player.get();
+    if (!p || !npc) return null;
+    const npcQuests = Object.values(QUESTS).filter(q => q.giverNpc === npc.id);
+
+    const readyQuest = npcQuests.find(q => p.activeQuests.includes(q.id) && Player.checkQuestComplete(q.id));
+    if (readyQuest) return { marker:'?', color:'#ffd700', state:'ready', questId:readyQuest.id };
+
+    const activeQuest = npcQuests.find(q => p.activeQuests.includes(q.id));
+    if (activeQuest) return { marker:'?', color:'#ffffff', state:'active', questId:activeQuest.id };
+
+    const dialogQuestId = npc.dialog && DIALOGS[npc.dialog]?.acceptQuest;
+    if (dialogQuestId && !p.activeQuests.includes(dialogQuestId) && !p.completedQuests.includes(dialogQuestId)) {
+      return { marker:'!', color:'#ffff00', state:'available', questId:dialogQuestId };
+    }
+
+    const followUp = npcQuests.find(q =>
+      !p.activeQuests.includes(q.id) &&
+      !p.completedQuests.includes(q.id) &&
+      Object.values(QUESTS).some(prev => prev.followUp === q.id && p.completedQuests.includes(prev.id))
+    );
+    if (followUp) return { marker:'!', color:'#ffff00', state:'available', questId:followUp.id };
+
+    return null;
+  }
+
+  function interactQuestNpc(npc) {
+    const questState = getNpcQuestState(npc);
+    if (questState?.state === 'ready') {
+      turnInQuest(questState.questId);
+      closeAll();
+      return;
+    }
+    if (questState?.state === 'active') {
+      toast(`${QUESTS[questState.questId]?.title || 'Quest'} is still in progress.`);
+      return;
+    }
+    if (questState?.state === 'available' && DIALOGS[npc.dialog]?.acceptQuest !== questState.questId) {
+      const quest = QUESTS[questState.questId];
+      if (quest && confirm(`Accept quest: ${quest.title}?`)) {
+        Player.acceptQuest(questState.questId);
+        toast(`Quest accepted: ${quest.title}`);
+      }
+      return;
+    }
+    if (npc.dialog) showDialog(npc.dialog);
+  }
+
   // ===== DIALOG =====
   function showDialog(dialogId) {
     const dialog = DIALOGS[dialogId];
@@ -351,11 +400,14 @@ const UI = (() => {
     actions.innerHTML = '';
 
     if (dialog.acceptQuest) {
+      const p = Player.get();
+      const canAccept = p && !p.activeQuests.includes(dialog.acceptQuest) && !p.completedQuests.includes(dialog.acceptQuest);
       const acceptBtn = document.createElement('button');
       acceptBtn.className = 'btn-wow';
       acceptBtn.style.fontSize = '13px';
       acceptBtn.style.padding = '7px 16px';
       acceptBtn.textContent = 'Accept Quest';
+      acceptBtn.disabled = !canAccept;
       acceptBtn.addEventListener('click', () => {
         const ok = Player.acceptQuest(dialog.acceptQuest);
         if (ok) toast(`Quest accepted: ${QUESTS[dialog.acceptQuest]?.title}`);
@@ -381,8 +433,9 @@ const UI = (() => {
   // ===== LEVEL UP =====
   function showLevelUp(level, statGains) {
     document.getElementById('levelup-number').textContent = level;
+    const goldLine = statGains.gold ? `<br>+${statGains.gold} Gold` : '';
     document.getElementById('levelup-stats').innerHTML =
-      `+${statGains.hp} Max HP &nbsp; +${statGains.mp} Max MP<br>+${Math.floor(statGains.atk)} ATK &nbsp; +${Math.floor(statGains.def)} DEF<br>+1 Talent Point`;
+      `+${statGains.hp} Max HP &nbsp; +${statGains.mp} Max MP<br>+${Math.floor(statGains.atk)} ATK &nbsp; +${Math.floor(statGains.def)} DEF<br>+1 Talent Point${goldLine}`;
     document.getElementById('overlay-levelup').classList.remove('hidden');
     overlayOpen = true;
     Game.setOverlayOpen(true);
@@ -409,6 +462,7 @@ const UI = (() => {
   return {
     updateHUD, closeAll, openInventory, openTalents, openQuests, openMap,
     showDialog, showLevelUp, closeLevelUp, toast, turnInQuest, renderInventory,
+    getNpcQuestState, interactQuestNpc,
     get overlayOpen() { return overlayOpen; }
   };
 })();

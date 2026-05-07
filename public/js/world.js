@@ -16,6 +16,7 @@ const World = (() => {
   const WORLD_W = 800;
   const WORLD_H = 440;
   const GROUND_Y = 350; // fixed y for player and mobs
+  const ZONE_TRANSITION_LOCK = 0.25;
 
   function init() {
     if (initialized) return; // prevent duplicate listeners
@@ -41,11 +42,17 @@ const World = (() => {
         if (k === 't') UI.openTalents();
         if (k === 'q') UI.openQuests();
         if (k === 'm') UI.openMap();
+        if (k === 'x') devLevelUp();
       }
     });
 
     window.addEventListener('keyup', e => {
       keys[e.key.toLowerCase()] = false;
+    });
+
+    window.addEventListener('blur', clearMovementKeys);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) clearMovementKeys();
     });
   }
 
@@ -55,10 +62,21 @@ const World = (() => {
     canvas.height = window.innerHeight;
   }
 
+  function devLevelUp() {
+    const p = Player.get();
+    if (!p) return;
+    Player.gainXP(p.xpToNext - p.xp);
+    const gains = Player.getLastLevelGains();
+    Player.fullHeal();
+    UI.updateHUD();
+    UI.toast(`Cheat: level ${p.level}${gains?.gold ? `, +${gains.gold} gold` : ''}!`);
+  }
+
   // fromDeath=true gives immunity so the player doesn't instantly re-fight after respawn
   function loadZone(zoneId, fromDeath = false) {
     const zone = ZONES.find(z => z.id === zoneId);
     if (!zone) return;
+    clearMovementKeys();
     worldMobs = [];
     spawnImmunity = fromDeath ? 2 : 0;
     placeEncounters(zone);
@@ -79,6 +97,14 @@ const World = (() => {
   // Basic mob pool — level 1-3, always beatable from the start
   function placeEncounters(zone) {
     if (!zone.mobs || !zone.mobs.length) return;
+    if (zone.bossOnly) {
+      const points = zone.spawnPoints || [];
+      zone.mobs.forEach((mobId, i) => {
+        const point = points[i] || { x: 180 + i * 180 };
+        addEncounter(point.x, mobId);
+      });
+      return;
+    }
     const count = zone.id === 'greenwood' ? 2 : 3;
     const points = [...(zone.spawnPoints || [])].sort(() => Math.random() - 0.5);
     for (let i = 0; i < Math.min(count, points.length); i++) {
@@ -145,7 +171,7 @@ const World = (() => {
     if (!p) return;
 
     if (zoneTransitionCooldown > 0) {
-      zoneTransitionCooldown -= dt;
+      zoneTransitionCooldown = Math.max(0, zoneTransitionCooldown - dt);
       p.y = GROUND_Y;
       return;
     }
@@ -181,9 +207,17 @@ const World = (() => {
       zoneTransitionCooldown = 2;
       return;
     }
-    zoneTransitionCooldown = 1.5;
+    clearMovementKeys();
+    zoneTransitionCooldown = ZONE_TRANSITION_LOCK;
     const entryX = wentRight ? PLAYER_SIZE + 40 : WORLD_W - PLAYER_SIZE - 40;
     Game.changeZone(exit.toZone, entryX);
+  }
+
+  function clearMovementKeys() {
+    keys['arrowleft'] = false;
+    keys['a'] = false;
+    keys['arrowright'] = false;
+    keys['d'] = false;
   }
 
   function checkInteractions() {
@@ -232,7 +266,7 @@ const World = (() => {
     const { type, data } = interactTarget;
     if (type === 'npc') {
       if (data.type === 'shop') Shop.open(data.shopId);
-      else if (data.type === 'quest') UI.showDialog(data.dialog);
+      else if (data.type === 'quest') UI.interactQuestNpc(data);
     } else if (type === 'boss') {
       Game.startCombat(data.mobId);
     }
@@ -342,6 +376,66 @@ const World = (() => {
         ctx.fillStyle = 'rgba(255,80,0,0.55)';
         ctx.beginPath(); ctx.ellipse(x * sx, y * sy, 13 * sx, 28 * sy, 0, 0, Math.PI * 2); ctx.fill();
       });
+    } else if (zone.tileLayout === 'abyss') {
+      [[120, 250], [310, 205], [505, 250], [690, 215]].forEach(([x, y]) => {
+        ctx.fillStyle = 'rgba(80,190,210,0.25)';
+        ctx.beginPath(); ctx.arc(x * sx, y * sy, 24 * sx, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#0b5364';
+        ctx.fillRect(x * sx - 5 * sx, y * sy, 10 * sx, 64 * sy);
+      });
+      [[210, 375], [455, 365], [620, 385]].forEach(([x, y]) => {
+        ctx.fillStyle = 'rgba(210,235,230,0.35)';
+        ctx.beginPath(); ctx.arc(x * sx, y * sy, 16 * sx, 0, Math.PI * 2); ctx.fill();
+      });
+    } else if (zone.tileLayout === 'moonfall') {
+      [[90, 215], [230, 365], [590, 230], [710, 360]].forEach(([x, y]) => {
+        ctx.fillStyle = '#24344f';
+        ctx.fillRect(x * sx - 5 * sx, y * sy, 10 * sx, 42 * sy);
+        ctx.fillStyle = 'rgba(170,185,255,0.32)';
+        ctx.beginPath(); ctx.arc(x * sx, y * sy, 24 * sx, 0, Math.PI * 2); ctx.fill();
+      });
+      [[350, 190], [470, 170], [530, 260]].forEach(([x, y]) => {
+        ctx.fillStyle = 'rgba(230,235,255,0.5)';
+        ctx.beginPath(); ctx.arc(x * sx, y * sy, 3 * sx, 0, Math.PI * 2); ctx.fill();
+      });
+    } else if (zone.tileLayout === 'peaks') {
+      [[125, 340], [300, 290], [500, 320], [690, 275]].forEach(([x, y]) => {
+        ctx.fillStyle = '#38265c';
+        ctx.beginPath();
+        ctx.moveTo(x * sx - 36 * sx, y * sy + 42 * sy);
+        ctx.lineTo(x * sx, y * sy - 34 * sy);
+        ctx.lineTo(x * sx + 42 * sx, y * sy + 42 * sy);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(210,150,255,0.35)';
+        ctx.stroke();
+      });
+      [[250, 190], [410, 160], [610, 200]].forEach(([x, y]) => {
+        ctx.strokeStyle = 'rgba(200,120,255,0.55)';
+        ctx.lineWidth = 2 * sx;
+        ctx.beginPath();
+        ctx.moveTo(x * sx, y * sy - 18 * sy);
+        ctx.lineTo(x * sx, y * sy + 18 * sy);
+        ctx.stroke();
+      });
+    } else if (zone.tileLayout === 'arena') {
+      ctx.strokeStyle = 'rgba(255,179,71,0.45)';
+      ctx.lineWidth = 3 * sx;
+      ctx.beginPath();
+      ctx.ellipse((WORLD_W / 2) * sx, 315 * sy, 280 * sx, 82 * sy, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      [[145, 245], [375, 205], [615, 245]].forEach(([x, y]) => {
+        ctx.fillStyle = '#4a260a';
+        ctx.fillRect(x * sx - 15 * sx, y * sy, 30 * sx, 95 * sy);
+        ctx.fillStyle = '#ffb347';
+        ctx.beginPath();
+        ctx.arc(x * sx, y * sy - 8 * sy, 18 * sx, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      [[245, 370], [505, 370]].forEach(([x, y]) => {
+        ctx.fillStyle = 'rgba(255,220,120,0.25)';
+        ctx.beginPath(); ctx.arc(x * sx, y * sy, 40 * sx, 0, Math.PI * 2); ctx.fill();
+      });
     }
   }
 
@@ -378,10 +472,12 @@ const World = (() => {
       ctx.fillText(npc.name, wx, wy - 26 * sy);
 
       // Quest/shop marker
-      const marker = npc.type === 'quest' ? '!' : '$';
-      ctx.fillStyle = npc.type === 'quest' ? '#ffff00' : '#44ff88';
-      ctx.font = `bold ${14 * sx}px serif`;
-      ctx.fillText(marker, wx, wy - 38 * sy);
+      const questMarker = npc.type === 'quest' ? UI.getNpcQuestState(npc) : null;
+      if (questMarker || npc.type === 'shop') {
+        ctx.fillStyle = questMarker ? questMarker.color : '#44ff88';
+        ctx.font = `bold ${14 * sx}px serif`;
+        ctx.fillText(questMarker ? questMarker.marker : '$', wx, wy - 38 * sy);
+      }
     });
   }
 

@@ -140,8 +140,7 @@ const QUESTS = {
       { id:'kill_chaos_lord', type:'kill', mob:'chaos_lord', count:1, current:0, label:"Defeat Arak'zoth (0/1)" }
     ],
     rewards: { xp:5000, gold:1000, items:['void_scepter','assassin_daggers','champions_blade'] },
-    followUp: null,
-    finale: true
+    followUp: null
   },
 
   // Extra side quests
@@ -223,7 +222,8 @@ const QUESTS = {
       { id:'kill_leviathan', type:'kill', mob:'abyss_leviathan', count:1, current:0, label:'Defeat Thalrassa (0/1)' }
     ],
     rewards: { xp:4500, gold:1200, items:['crown_of_depths','leviathan_charm','storm_elixir'] },
-    followUp: null
+    followUp: null,
+    finale: true
   }
 };
 

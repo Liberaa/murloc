@@ -1,5 +1,94 @@
-// Extra dialog scripts for expanded quest NPCs.
+// Starter hub and extra dialog scripts for expanded quest NPCs.
+Object.assign(QUESTS, {
+  q_marsh_road: {
+    id: 'q_marsh_road',
+    title: 'Road to Ashfen',
+    giverNpc: 'guard_leo',
+    zone: 'greenwood',
+    desc: 'Guard Leo keeps Greenwood safe, but the road into Ashfen Marshes needs clearing before trade can move again.',
+    objectives: [
+      { id:'kill_lurkers_road', type:'kill', mob:'bog_lurker', count:3, current:0, label:'Kill Bog Lurkers (0/3)' }
+    ],
+    rewards: { xp:120, gold:45, items:['health_potion','bandage'] },
+    followUp: null
+  },
+  q_moonfall_hunt: {
+    id: 'q_moonfall_hunt',
+    title: 'Silver Things in the Hollow',
+    giverNpc: 'warden_selene',
+    zone: 'moonfall_hollow',
+    desc: 'Warden Selene has watched strange beasts gather under the moon west of Greenwood. Thin their numbers before they spill toward town.',
+    objectives: [
+      { id:'kill_moon_moths', type:'kill', mob:'moon_moth', count:3, current:0, label:'Kill Moon Moths (0/3)' },
+      { id:'kill_pouncers', type:'kill', mob:'thorn_pouncer', count:3, current:0, label:'Kill Thorn Pouncers (0/3)' }
+    ],
+    rewards: { xp:220, gold:70, items:['greater_health_potion'] },
+    followUp: 'q_lunar_stag'
+  },
+  q_lunar_stag: {
+    id: 'q_lunar_stag',
+    title: 'The Antlers of Moonlight',
+    giverNpc: 'warden_selene',
+    zone: 'moonfall_hollow',
+    desc: 'Aurelion, the Lunar Stag, has woken in the heart of the hollow. Defeat it before the old magic turns hostile.',
+    objectives: [
+      { id:'kill_cultists_hollow', type:'kill', mob:'hollow_cultist', count:3, current:0, label:'Kill Hollow Cultists (0/3)' },
+      { id:'kill_treants_hollow', type:'kill', mob:'starved_treant', count:2, current:0, label:'Kill Starved Treants (0/2)' },
+      { id:'kill_lunar_stag', type:'kill', mob:'lunar_stag', count:1, current:0, label:'Defeat Aurelion (0/1)' }
+    ],
+    rewards: { xp:650, gold:160, items:['moonlit_cloak','hollowthorn_ring'] },
+    followUp: null
+  },
+  q_titan_crown_arena: {
+    id: 'q_titan_crown_arena',
+    title: 'Crowns for the Crownless',
+    giverNpc: 'legend_keeper_oria',
+    zone: 'staffbreaker_peaks',
+    desc: 'Legend Keeper Oria wants proof that the level 20 arena bosses can bleed. Bring down the rulers of the Titan Crown Arena.',
+    objectives: [
+      { id:'kill_iron_titan_king', type:'kill', mob:'iron_titan_king', count:1, current:0, label:'Defeat Mordax (0/1)' },
+      { id:'kill_void_star_queen', type:'kill', mob:'void_star_queen', count:1, current:0, label:'Defeat Nysera (0/1)' },
+      { id:'kill_chrono_dragon_lord', type:'kill', mob:'chrono_dragon_lord', count:1, current:0, label:'Defeat Vaelux (0/1)' }
+    ],
+    rewards: { xp:6500, gold:2500, items:['crown_of_twenty_kings','titanbreaker_greatstaff'] },
+    followUp: null
+  }
+});
+
 Object.assign(DIALOGS, {
+  start_quest_marsh_road: {
+    npc: 'Guard Leo',
+    portrait: 'G',
+    lines: [
+      "Greenwood itself is safe. No rats, no ambushes, no nonsense inside the village line.",
+      "The trouble starts east on the road to Ashfen Marshes.",
+      "Clear a few lurkers from the road and trade can move again."
+    ],
+    acceptQuest: 'q_marsh_road',
+    declineText: 'Not yet.'
+  },
+  start_quest_moonfall: {
+    npc: 'Warden Selene',
+    portrait: 'S',
+    lines: [
+      "West of Greenwood, the hollow glows even when the moon is gone.",
+      "The beasts there are not ordinary, and the old stag at its heart guards relics people whisper about.",
+      "Help me contain the hollow before its magic reaches the village."
+    ],
+    acceptQuest: 'q_moonfall_hunt',
+    declineText: 'Not now.'
+  },
+  start_quest_titan_crown: {
+    npc: 'Legend Keeper Oria',
+    portrait: 'L',
+    lines: [
+      "You found the first boss zone. Good. That means you are either brave or testing.",
+      "Further west waits the Titan Crown Arena: three level 20 bosses, each carrying relics that should probably be illegal.",
+      "Defeat them, and I will name you crownless no longer."
+    ],
+    acceptQuest: 'q_titan_crown_arena',
+    declineText: 'I need more power.'
+  },
   start_quest_ratcatcher: {
     npc: 'Ranger Elowen',
     portrait: 'R',

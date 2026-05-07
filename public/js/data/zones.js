@@ -4,40 +4,116 @@ const ZONES = [
     id: 'greenwood',
     name: 'Greenwood Vale',
     desc: 'A peaceful forest hiding dangerous creatures.',
-    levelRange: [1, 5],
+    levelRange: [1, 1],
     unlockLevel: 1,
     bgColor: '#1a3a1a',
     groundColor: '#2d5a2d',
     accent: '#4a8a4a',
     icon: 'T',
-    mobs: ['forest_rat','goblin_scout','forest_wolf','giant_spider'],
-    mobWeights: [3, 3, 2, 1],
-    boss: 'alpha_wolf',
-    bossDefeated: false,
+    mobs: [],
+    mobWeights: [],
+    boss: null,
+    bossDefeated: true,
     npcs: [
-      { id:'guard_leo', name:'Guard Leo', icon:'G', x:200, y:250, dialog:'start_quest_wolf', type:'quest' },
-      { id:'merchant_mira', name:'Mira the Merchant', icon:'M', x:380, y:220, type:'shop', shopId:'shop_greenwood' },
-      { id:'ranger_elowen', name:'Ranger Elowen', icon:'R', x:585, y:235, dialog:'start_quest_ratcatcher', type:'quest' }
+      { id:'guard_leo', name:'Guard Leo', icon:'G', x:240, y:250, dialog:'start_quest_marsh_road', type:'quest' },
+      { id:'merchant_mira', name:'Mira the Merchant', icon:'M', x:410, y:220, type:'shop', shopId:'shop_greenwood' },
+      { id:'epic_vendor_lyra', name:'Lyra the Epic Vendor', icon:'E', x:570, y:230, type:'shop', shopId:'shop_greenwood_epics' }
     ],
     exits: [
-      { label:'-> Ashfen Marshes', toZone:'ashfen', x:750, y:300, unlockLevel:5 }
+      { label:'<- Moonfall Hollow', toZone:'moonfall_hollow', x:50, y:300, unlockLevel:1 },
+      { label:'-> Ashfen Marshes', toZone:'ashfen', x:750, y:300, unlockLevel:1 }
     ],
     shopId: 'shop_greenwood',
     tileLayout: 'forest',
     spawnPoints: [{x:100,y:300},{x:200,y:350},{x:350,y:280},{x:500,y:320},{x:600,y:290}]
   },
   {
+    id: 'moonfall_hollow',
+    name: 'Moonfall Hollow',
+    desc: 'A silver-lit hollow west of Greenwood, full of old magic and rare beasts.',
+    levelRange: [2, 5],
+    unlockLevel: 1,
+    bgColor: '#10182d',
+    groundColor: '#182644',
+    accent: '#7b8fd8',
+    icon: 'H',
+    mobs: ['moon_moth','thorn_pouncer','hollow_cultist','starved_treant'],
+    mobWeights: [3, 3, 2, 1],
+    boss: 'lunar_stag',
+    bossDefeated: false,
+    npcs: [
+      { id:'warden_selene', name:'Warden Selene', icon:'S', x:210, y:250, dialog:'start_quest_moonfall', type:'quest' },
+      { id:'relic_broker_nox', name:'Relic Broker Nox', icon:'N', x:430, y:225, type:'shop', shopId:'shop_moonfall' }
+    ],
+    exits: [
+      { label:'<- Staffbreaker Peaks', toZone:'staffbreaker_peaks', x:50, y:300, unlockLevel:1 },
+      { label:'-> Greenwood Vale', toZone:'greenwood', x:750, y:300, unlockLevel:1 }
+    ],
+    shopId: 'shop_moonfall',
+    tileLayout: 'moonfall',
+    spawnPoints: [{x:120,y:315},{x:255,y:355},{x:395,y:295},{x:540,y:340},{x:675,y:300}]
+  },
+  {
+    id: 'staffbreaker_peaks',
+    name: 'Staffbreaker Peaks',
+    desc: 'A boss-only ridge where arrogant mages lose their staffs and stronger mages steal them.',
+    levelRange: [6, 10],
+    unlockLevel: 1,
+    bgColor: '#17122e',
+    groundColor: '#24183f',
+    accent: '#c58bff',
+    icon: 'P',
+    mobs: ['spark_ogre_magus','glass_dragon_adept','worldroot_archmage'],
+    mobWeights: [3, 2, 1],
+    boss: null,
+    bossOnly: true,
+    bossDefeated: true,
+    npcs: [
+      { id:'legend_keeper_oria', name:'Legend Keeper Oria', icon:'L', x:250, y:245, dialog:'start_quest_titan_crown', type:'quest' }
+    ],
+    exits: [
+      { label:'<- Titan Crown Arena', toZone:'titan_crown_arena', x:50, y:300, unlockLevel:1 },
+      { label:'-> Moonfall Hollow', toZone:'moonfall_hollow', x:750, y:300, unlockLevel:1 }
+    ],
+    shopId: null,
+    tileLayout: 'peaks',
+    spawnPoints: [{x:145,y:315},{x:330,y:350},{x:555,y:315}]
+  },
+  {
+    id: 'titan_crown_arena',
+    name: 'Titan Crown Arena',
+    desc: 'A level 20 boss arena where the crowns are heavy and the loot is heavier.',
+    levelRange: [20, 20],
+    unlockLevel: 1,
+    bgColor: '#21120b',
+    groundColor: '#38200e',
+    accent: '#ffb347',
+    icon: 'T',
+    mobs: ['iron_titan_king','void_star_queen','chrono_dragon_lord'],
+    mobWeights: [1, 1, 1],
+    boss: null,
+    bossOnly: true,
+    bossDefeated: true,
+    npcs: [],
+    exits: [
+      { label:'-> Staffbreaker Peaks', toZone:'staffbreaker_peaks', x:750, y:300, unlockLevel:1 }
+    ],
+    shopId: null,
+    tileLayout: 'arena',
+    spawnPoints: [{x:150,y:315},{x:375,y:350},{x:610,y:315}]
+  },
+  {
     id: 'ashfen',
     name: 'Ashfen Marshes',
-    desc: 'Dark swamps teeming with poisonous life.',
-    levelRange: [5, 10],
-    unlockLevel: 5,
+    desc: 'A dangerous marsh road just outside Greenwood.',
+    levelRange: [1, 3],
+    unlockLevel: 1,
     bgColor: '#1a2a12',
     groundColor: '#2a3e1a',
     accent: '#3a5a2a',
     icon: 'W',
     mobs: ['bog_lurker','swamp_troll','venomfang_serpent','marsh_wraith'],
-    mobWeights: [3, 2, 2, 1],
+    mobWeights: [5, 2, 2, 1],
     boss: 'bogmother',
     bossDefeated: false,
     npcs: [
@@ -47,7 +123,7 @@ const ZONES = [
     ],
     exits: [
       { label:'<- Greenwood Vale', toZone:'greenwood', x:50, y:300, unlockLevel:1 },
-      { label:'-> Ironspire Ruins', toZone:'ironspire', x:750, y:300, unlockLevel:10 }
+      { label:'-> Ironspire Ruins', toZone:'ironspire', x:750, y:300, unlockLevel:1 }
     ],
     shopId: 'shop_ashfen',
     tileLayout: 'swamp',
@@ -57,8 +133,8 @@ const ZONES = [
     id: 'ironspire',
     name: 'Ironspire Ruins',
     desc: 'Ancient ruins haunted by dark forces.',
-    levelRange: [10, 18],
-    unlockLevel: 10,
+    levelRange: [3, 6],
+    unlockLevel: 1,
     bgColor: '#0a0a1a',
     groundColor: '#1a1a2e',
     accent: '#3a3a5a',
@@ -74,7 +150,7 @@ const ZONES = [
     ],
     exits: [
       { label:'<- Ashfen Marshes', toZone:'ashfen', x:50, y:300, unlockLevel:1 },
-      { label:'-> Throne of Chaos', toZone:'chaos_throne', x:750, y:300, unlockLevel:18 }
+      { label:'-> Throne of Chaos', toZone:'chaos_throne', x:750, y:300, unlockLevel:1 }
     ],
     shopId: 'shop_ironspire',
     tileLayout: 'ruins',
@@ -84,8 +160,8 @@ const ZONES = [
     id: 'chaos_throne',
     name: 'Throne of Chaos',
     desc: 'The seat of Arak\'zoth. Pure darkness and fire.',
-    levelRange: [18, 25],
-    unlockLevel: 18,
+    levelRange: [6, 9],
+    unlockLevel: 1,
     bgColor: '#1a0000',
     groundColor: '#2e0800',
     accent: '#6a1a00',
@@ -100,7 +176,7 @@ const ZONES = [
     ],
     exits: [
       { label:'<- Ironspire Ruins', toZone:'ironspire', x:50, y:300, unlockLevel:1 },
-      { label:'-> Sunken Abyss', toZone:'sunken_abyss', x:750, y:300, unlockLevel:25 }
+      { label:'-> Sunken Abyss', toZone:'sunken_abyss', x:750, y:300, unlockLevel:1 }
     ],
     shopId: 'shop_chaos',
     tileLayout: 'chaos',
@@ -110,8 +186,8 @@ const ZONES = [
     id: 'sunken_abyss',
     name: 'Sunken Abyss',
     desc: 'A drowned kingdom beneath endless black water.',
-    levelRange: [25, 32],
-    unlockLevel: 25,
+    levelRange: [9, 12],
+    unlockLevel: 1,
     bgColor: '#021520',
     groundColor: '#062b3c',
     accent: '#1b8aa5',
@@ -139,6 +215,14 @@ const SHOPS = {
   shop_greenwood: {
     name: "Mira's General Store",
     items: ['health_potion','mana_potion','bandage','bread','antidote','iron_sword','iron_shield','chain_mail','iron_helm','oak_staff','mage_robes','mage_hat','bronze_daggers','leather_armor','rogue_hood']
+  },
+  shop_greenwood_epics: {
+    name: "Lyra's Epic Starter Gear",
+    items: ['adventurer_kingsword','violet_apprentice_staff','lucky_shadow_daggers','violet_hero_chest','quicksilver_gloves','brightstar_charm','ridiculous_godstaff']
+  },
+  shop_moonfall: {
+    name: "Nox's Relics",
+    items: ['health_potion','mana_potion','greater_health_potion','greater_mana_potion','moonlit_cloak','hollowthorn_ring','boots_haste','gloves_grip']
   },
   shop_ashfen: {
     name: "Ada's Alchemy",
