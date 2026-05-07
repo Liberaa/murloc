@@ -17,8 +17,10 @@ const Combat = (() => {
   let reflect = { enemy: false };
   let skillCooldowns = {};
   let pendingLoot = null;
+  let keyboardInitialized = false;
 
   function start(mobId, winCb, loseCb) {
+    initKeyboardShortcuts();
     const mobTemplate = MOBS[mobId];
     enemy = JSON.parse(JSON.stringify(mobTemplate));
     enemyCurrentHp = enemy.hp;
@@ -47,6 +49,27 @@ const Combat = (() => {
 
     // Show main menu
     showMainMenu();
+  }
+
+  function initKeyboardShortcuts() {
+    if (keyboardInitialized) return;
+    keyboardInitialized = true;
+    window.addEventListener('keydown', e => {
+      if (e.code !== 'Space') return;
+
+      const lootOpen = pendingLoot && !document.getElementById('overlay-loot').classList.contains('hidden');
+      const combatActive = document.getElementById('screen-combat')?.classList.contains('active');
+      if (!lootOpen && !combatActive) return;
+
+      e.preventDefault();
+      if (lootOpen) {
+        collectLoot();
+        return;
+      }
+      if (combatActive && playerTurn && !combatOver) {
+        playerAction('attack');
+      }
+    });
   }
 
   function renderCombatScreen() {
