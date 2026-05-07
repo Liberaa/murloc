@@ -2,7 +2,7 @@
 const ITEMS = {
   // Consumables
   health_potion:    { id:'health_potion',    name:'Health Potion',    icon:'🧪', type:'consumable', quality:'common',   value:10,  desc:'Restores 50 HP.',          effect:{hp:50} },
-  mana_potion:      { id:'mana_potion',      name:'Mana Potion',      icon:'🔵', type:'consumable', quality:'common',   value:10,  desc:'Restores 30 MP.',          effect:{mp:30} },
+  mana_potion:      { id:'mana_potion',      name:'Mana Potion',      icon:'🔵', type:'consumable', quality:'common',   value:10,  desc:'Restores 300 MP.',          effect:{mp:300} },
   elixir_strength:  { id:'elixir_strength',  name:'Elixir of Might', icon:'💪', type:'consumable', quality:'uncommon', value:40,  desc:'Restores 120 HP.',         effect:{hp:120} },
   bandage:          { id:'bandage',          name:'Bandage',          icon:'🩹', type:'consumable', quality:'common',   value:5,   desc:'Restores 30 HP out of combat.', effect:{hp:30} },
   antidote:         { id:'antidote',         name:'Antidote',         icon:'🍵', type:'consumable', quality:'common',   value:8,   desc:'Cures poison.',            effect:{cure_poison:true} },
@@ -41,4 +41,33 @@ const ITEMS = {
   amulet_power:     { id:'amulet_power',     name:'Amulet of Power',  icon:'📿',  type:'armor',   slot:'neck',    quality:'rare',     value:180, stats:{atk:8, def:8, hp:30}, desc:'Ancient talisman of might.' },
   boots_haste:      { id:'boots_haste',      name:'Boots of Haste',   icon:'👢',  type:'armor',   slot:'feet',    quality:'uncommon', value:70,  stats:{agi:8, def:5},    desc:'You move like lightning.' },
   gloves_grip:      { id:'gloves_grip',      name:'Battle Gloves',    icon:'🥊',  type:'armor',   slot:'hands',   quality:'common',   value:25,  stats:{atk:4, def:3},    desc:'Reinforced combat gloves.' },
+  // Mid-game weapons and armor
+  coral_cutlass:    { id:'coral_cutlass',    name:'Coral Cutlass',     icon:'C', type:'weapon', slot:'weapon', quality:'uncommon', value:130, stats:{atk:22, agi:4}, desc:'A curved blade edged with hardened coral.', class:['warrior','rogue'] },
+  tide_staff:       { id:'tide_staff',       name:'Tidecaller Staff',  icon:'T', type:'weapon', slot:'weapon', quality:'uncommon', value:140, stats:{atk:7, int:24, mp:35}, desc:'A staff that hums with sea magic.', class:['mage'] },
+  frost_axe:        { id:'frost_axe',        name:'Frostforged Axe',   icon:'A', type:'weapon', slot:'weapon', quality:'rare', value:310, stats:{atk:42, def:8}, desc:'Cold iron with a bite like winter.', class:['warrior'] },
+  glacier_wand:     { id:'glacier_wand',     name:'Glacier Wand',      icon:'W', type:'weapon', slot:'weapon', quality:'rare', value:300, stats:{atk:9, int:42, mp:50}, desc:'A wand capped with never-melting ice.', class:['mage'] },
+  nightfang:        { id:'nightfang',        name:'Nightfang',         icon:'N', type:'weapon', slot:'weapon', quality:'rare', value:305, stats:{atk:34, agi:22, crit:12}, desc:'A silent dagger from the northern passes.', class:['rogue'] },
+  scale_vest:       { id:'scale_vest',       name:'Reefscale Vest',    icon:'V', type:'armor', slot:'chest', quality:'uncommon', value:135, stats:{def:16, hp:45, agi:5}, desc:'Flexible armor made from bright sea scales.' },
+  frost_cloak:      { id:'frost_cloak',      name:'Frostguard Cloak',  icon:'K', type:'armor', slot:'neck', quality:'rare', value:220, stats:{def:12, hp:70, mp:20}, desc:'A heavy cloak lined against mountain winds.' },
+  sapphire_ring:    { id:'sapphire_ring',    name:'Sapphire Band',     icon:'S', type:'armor', slot:'ring', quality:'rare', value:210, stats:{int:14, mp:45, crit:5}, desc:'A ring that sharpens focus and spellwork.' },
+  titan_gauntlets:  { id:'titan_gauntlets',  name:'Titan Gauntlets',   icon:'G', type:'armor', slot:'hands', quality:'rare', value:240, stats:{atk:12, def:12, str:6}, desc:'Heavy gloves sized for heroic work.' },
+
+  // Utility consumables
+  greater_health_potion: { id:'greater_health_potion', name:'Greater Health Potion', icon:'H', type:'consumable', quality:'uncommon', value:35, desc:'Restores 150 HP.', effect:{hp:150} },
+  greater_mana_potion:   { id:'greater_mana_potion',   name:'Greater Mana Potion',   icon:'M', type:'consumable', quality:'uncommon', value:35, desc:'Restores 180 MP.', effect:{mp:180} },
+  heroic_health_potion:  { id:'heroic_health_potion',  name:'Heroic Health Potion',  icon:'H', type:'consumable', quality:'rare', value:85, desc:'Restores 320 HP.', effect:{hp:320} },
+  heroic_mana_potion:    { id:'heroic_mana_potion',    name:'Heroic Mana Potion',    icon:'M', type:'consumable', quality:'rare', value:85, desc:'Restores 360 MP.', effect:{mp:360} },
+  storm_elixir:          { id:'storm_elixir',          name:'Storm Elixir',          icon:'E', type:'consumable', quality:'rare', value:120, desc:'Restores 220 HP and 180 MP.', effect:{hp:220, mp:180} },
+
+  // End-game weapons and armor
+  sunken_trident:        { id:'sunken_trident',        name:'Sunken Trident',        icon:'T', type:'weapon', slot:'weapon', quality:'rare', value:420, stats:{atk:52, def:10, hp:60}, desc:'A royal spear pulled from a drowned empire.', class:['warrior'] },
+  stormcaller_rod:       { id:'stormcaller_rod',       name:'Stormcaller Rod',       icon:'R', type:'weapon', slot:'weapon', quality:'rare', value:430, stats:{atk:12, int:58, mp:90, crit:6}, desc:'Lightning crawls over its silver runes.', class:['mage'] },
+  reefrazor_twins:       { id:'reefrazor_twins',       name:'Reefrazor Twins',       icon:'D', type:'weapon', slot:'weapon', quality:'rare', value:425, stats:{atk:44, agi:30, crit:16}, desc:'Paired blades made for quick tidewater kills.', class:['rogue'] },
+  tideplate_cuirass:     { id:'tideplate_cuirass',     name:'Tideplate Cuirass',     icon:'P', type:'armor', slot:'chest', quality:'rare', value:360, stats:{def:34, hp:120, str:8}, desc:'Heavy plate sealed against crushing pressure.', class:['warrior'] },
+  astralweave_robes:     { id:'astralweave_robes',     name:'Astralweave Robes',     icon:'A', type:'armor', slot:'chest', quality:'rare', value:350, stats:{def:14, int:28, mp:120}, desc:'Cloth that catches starlight in its seams.', class:['mage'] },
+  duskstalker_jacket:    { id:'duskstalker_jacket',    name:'Duskstalker Jacket',    icon:'J', type:'armor', slot:'chest', quality:'rare', value:350, stats:{def:24, agi:24, crit:8}, desc:'Quiet armor for hunters who strike at dusk.', class:['rogue'] },
+  crown_of_depths:       { id:'crown_of_depths',       name:'Crown of Depths',       icon:'C', type:'armor', slot:'head', quality:'rare', value:280, stats:{def:12, int:18, hp:80, mp:60}, desc:'A barnacled crown that still remembers command.' },
+  leviathan_charm:       { id:'leviathan_charm',       name:'Leviathan Charm',       icon:'L', type:'armor', slot:'neck', quality:'rare', value:320, stats:{atk:16, def:16, hp:90}, desc:'A tooth from something that swallowed ships.' },
+  pearl_of_focus:        { id:'pearl_of_focus',        name:'Pearl of Focus',        icon:'O', type:'armor', slot:'offhand', quality:'rare', value:300, stats:{int:24, mp:85, crit:7}, desc:'A perfect pearl used to focus spellcraft.', class:['mage'] },
+  tidewalker_boots:      { id:'tidewalker_boots',      name:'Tidewalker Boots',      icon:'B', type:'armor', slot:'feet', quality:'rare', value:255, stats:{agi:18, def:10, hp:40}, desc:'Sure footing, even on slick stone.' },
 };

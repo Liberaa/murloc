@@ -3,21 +3,21 @@ const MOBS = {
   // === ZONE 1: Greenwood Vale (lv 1-5) ===
   forest_rat: {
     id:'forest_rat', name:'Forest Rat', icon:'🐀', level:1,
-    hp:18, atk:3, def:1, xp:8, gold:[0,2],
+    hp:18, atk:3, def:1, xp:25, gold:[0,2],
     loot:[{id:'bread',chance:0.3}],
     skills:[], aiType:'basic',
     color:'#8B6914'
   },
   goblin_scout: {
     id:'goblin_scout', name:'Goblin Scout', icon:'👺', level:2,
-    hp:28, atk:5, def:2, xp:14, gold:[1,4],
+    hp:28, atk:5, def:2, xp:40, gold:[1,4],
     loot:[{id:'bandage',chance:0.25},{id:'health_potion',chance:0.1}],
     skills:[{id:'stab',name:'Stab',dmg:8,type:'physical',mp:0}],
     aiType:'basic', color:'#4a7a4a'
   },
   forest_wolf: {
     id:'forest_wolf', name:'Forest Wolf', icon:'🐺', level:3,
-    hp:40, atk:8, def:3, xp:20, gold:[1,5],
+    hp:40, atk:8, def:3, xp:60, gold:[1,5],
     loot:[{id:'health_potion',chance:0.2}],
     skills:[{id:'bite',name:'Bite',dmg:12,type:'physical',mp:0,effect:'bleed'}],
     aiType:'aggressive', color:'#6a6a8a'
@@ -192,6 +192,75 @@ const MOBS = {
     aiType:'boss', boss:true, finalBoss:true, color:'#6a0a0a', phases:[
       {hpPct:0.66, msg:"Arak'zoth roars: 'You dare challenge me?!'", atkMult:1.3},
       {hpPct:0.33, msg:"Arak'zoth unleashes his true form!", atkMult:1.6}
+    ]
+  },
+
+  // === ZONE 5: Sunken Abyss (lv 25-32) ===
+  drowned_sailor: {
+    id:'drowned_sailor', name:'Drowned Sailor', icon:'S', level:25,
+    hp:360, atk:70, def:30, xp:310, gold:[32,52],
+    loot:[{id:'greater_health_potion',chance:0.35},{id:'tidewalker_boots',chance:0.08}],
+    skills:[
+      {id:'rusty_hook',name:'Rusty Hook',dmg:86,type:'physical',mp:0,effect:'bleed'},
+      {id:'cold_grip',name:'Cold Grip',dmg:70,type:'magic',mp:0,effect:'reduce_atk'}
+    ],
+    aiType:'aggressive', color:'#2b6f7f'
+  },
+  coral_guardian: {
+    id:'coral_guardian', name:'Coral Guardian', icon:'G', level:27,
+    hp:520, atk:76, def:44, xp:380, gold:[40,62],
+    loot:[{id:'tideplate_cuirass',chance:0.08},{id:'leviathan_charm',chance:0.06},{id:'heroic_health_potion',chance:0.18}],
+    skills:[
+      {id:'reef_wall',name:'Reef Wall',dmg:0,type:'buff',mp:0,effect:'reflect'},
+      {id:'coral_crush',name:'Coral Crush',dmg:105,type:'physical',mp:0}
+    ],
+    aiType:'defensive', color:'#b64f6f'
+  },
+  abyssal_mage: {
+    id:'abyssal_mage', name:'Abyssal Mage', icon:'M', level:28,
+    hp:390, atk:86, def:26, xp:420, gold:[44,70],
+    loot:[{id:'stormcaller_rod',chance:0.08},{id:'astralweave_robes',chance:0.08},{id:'heroic_mana_potion',chance:0.22}],
+    skills:[
+      {id:'tidal_bolt',name:'Tidal Bolt',dmg:118,type:'magic',mp:0},
+      {id:'mind_sink',name:'Mind Sink',dmg:0,type:'debuff',mp:0,effect:'reduce_def'},
+      {id:'deep_mending',name:'Deep Mending',dmg:-130,type:'heal',mp:0}
+    ],
+    aiType:'magic', color:'#215a9a'
+  },
+  tide_assassin: {
+    id:'tide_assassin', name:'Tide Assassin', icon:'A', level:29,
+    hp:410, atk:94, def:28, xp:450, gold:[48,76],
+    loot:[{id:'reefrazor_twins',chance:0.08},{id:'duskstalker_jacket',chance:0.08},{id:'smoke_bomb',chance:0.2}],
+    skills:[
+      {id:'undertow_stab',name:'Undertow Stab',dmg:128,type:'physical',mp:0,effect:'poison'},
+      {id:'mist_vanish',name:'Mist Vanish',dmg:0,type:'buff',mp:0,effect:'evade'}
+    ],
+    aiType:'aggressive', color:'#17324c'
+  },
+  pearl_colossus: {
+    id:'pearl_colossus', name:'Pearl Colossus', icon:'C', level:31,
+    hp:780, atk:104, def:54, xp:560, gold:[60,95],
+    loot:[{id:'crown_of_depths',chance:0.09},{id:'pearl_of_focus',chance:0.08},{id:'storm_elixir',chance:0.18}],
+    skills:[
+      {id:'shellquake',name:'Shellquake',dmg:145,type:'physical',mp:0,effect:'stun'},
+      {id:'pearl_flash',name:'Pearl Flash',dmg:110,type:'magic',mp:0,effect:'reduce_atk'}
+    ],
+    aiType:'defensive', color:'#d6d6c2'
+  },
+  abyss_leviathan: {
+    id:'abyss_leviathan', name:'Thalrassa, Abyss Leviathan', icon:'L', level:32,
+    hp:3200, atk:118, def:58, xp:3500, gold:[650,950],
+    loot:[{id:'sunken_trident',chance:0.65},{id:'stormcaller_rod',chance:0.55},{id:'reefrazor_twins',chance:0.55},{id:'crown_of_depths',chance:0.4},{id:'leviathan_charm',chance:0.45}],
+    skills:[
+      {id:'maelstrom',name:'Maelstrom',dmg:165,type:'magic',mp:0},
+      {id:'crushing_depths',name:'Crushing Depths',dmg:190,type:'physical',mp:0,effect:'stun'},
+      {id:'abyssal_roar',name:'Abyssal Roar',dmg:0,type:'debuff',mp:0,effect:'reduce_all'},
+      {id:'ancient_regen',name:'Ancient Regeneration',dmg:-260,type:'heal',mp:0},
+      {id:'black_tide',name:'Black Tide',dmg:145,type:'poison',mp:0,effect:'poison'}
+    ],
+    aiType:'boss', boss:true, color:'#05263d', phases:[
+      {hpPct:0.7, msg:'Thalrassa dives, then erupts in a wall of black water!', atkMult:1.25},
+      {hpPct:0.35, msg:'The abyss answers Thalrassa with a final storm!', atkMult:1.55}
     ]
   }
 };

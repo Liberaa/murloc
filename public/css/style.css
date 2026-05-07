@@ -873,3 +873,45 @@ body {
   .spec-cards { flex-direction: column; }
   .spec-card { width: 100%; }
 }
+
+/* ===== LOOT PANEL ===== */
+.loot-panel {
+  min-width: 300px;
+  max-width: 440px;
+  text-align: center;
+  padding: 28px 32px;
+}
+.loot-victory-title {
+  font-size: 1.9rem;
+  color: #ffd700;
+  text-shadow: 0 0 14px #ff8800, 0 0 28px #ff4400;
+  margin-bottom: 18px;
+  letter-spacing: 4px;
+}
+.loot-stat-line {
+  font-size: 1.05rem;
+  color: #88ffcc;
+  margin: 5px 0;
+}
+.loot-items-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 16px 0;
+  min-height: 48px;
+}
+.loot-item-box {
+  background: rgba(0,0,0,0.55);
+  border: 1px solid #6a5a2a;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  color: #ffd700;
+  min-width: 72px;
+  cursor: default;
+  transition: border-color .15s;
+}
+.loot-item-box:hover { border-color: #ffd700; background: rgba(255,215,0,0.1); }
+.loot-empty { color: #888; font-style: italic; font-size: 0.9rem; }
+.loot-collect-btn { margin-top: 18px; font-size: 1rem; padding: 10px 30px; }

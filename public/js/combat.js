@@ -16,6 +16,7 @@ const Combat = (() => {
   let damageAmp = { player: 0, enemy: 0 };  // extra % dmg taken
   let reflect = { enemy: false };
   let skillCooldowns = {};
+  let pendingLoot = null;
 
   function start(mobId, winCb, loseCb) {
     const mobTemplate = MOBS[mobId];
@@ -233,6 +234,7 @@ const Combat = (() => {
       nextCrit.player = false;
       if (crit) dmg = Math.floor(dmg * 1.8);
       if (damageAmp.enemy > 0) dmg = Math.floor(dmg * (1 + damageAmp.enemy));
+      if (skill.effect === 'stun') stunned.enemy = true;
       damageEnemy(dmg, crit ? 'crit' : 'physical');
       addLog(`${crit?'⚡ CRIT! ':''}${skill.icon} ${skill.name}: ${dmg} damage!`, 'player');
 
@@ -453,6 +455,9 @@ const Combat = (() => {
     let dmg = Math.max(1, skill.dmg + Math.floor(enemy.atk * 0.3) - Math.floor(Player.totalStat('def') * 0.5));
     if (skill.lifesteal) { enemyCurrentHp = Math.min(enemyMaxHp, enemyCurrentHp + Math.floor(dmg * 0.5)); }
     if (skill.effect === 'poison') applyStatus('player', 'poison', 8, 3);
+    if (skill.effect === 'bleed') applyStatus('player', 'bleed', 10, 3);
+    if (skill.effect === 'reduce_atk') applyStatus('player', 'atk_down', 0.2, 2);
+    if (skill.effect === 'reduce_def') applyStatus('player', 'def_down', 0.2, 2);
     if (skill.effect === 'stun') stunned.player = true;
     if (p.buffDefTurns > 0) dmg = Math.floor(dmg * (1 - p.buffDef));
     p.hp = Math.max(0, p.hp - dmg);
@@ -566,35 +571,58 @@ const Combat = (() => {
 
   function handleVictory() {
     const p = Player.get();
-    // XP
     const xp = enemy.xp;
     const leveled = Player.gainXP(xp);
     addLog(`Gained ${xp} XP!`, 'loot');
 
-    // Gold
     const [minG, maxG] = enemy.gold;
     const gold = minG + Math.floor(Math.random() * (maxG - minG + 1));
-    p.gold += gold;
-    addLog(`Looted ${gold} gold!`, 'loot');
 
-    // Loot items
     const lootedItems = [];
     if (enemy.loot) {
       enemy.loot.forEach(drop => {
-        if (Math.random() < drop.chance) {
-          Player.addToInventory(drop.id);
-          lootedItems.push(ITEMS[drop.id].name);
-        }
+        if (Math.random() < drop.chance) lootedItems.push(drop.id);
       });
     }
-    if (lootedItems.length) addLog(`Found: ${lootedItems.join(', ')}`, 'loot');
 
-    // Quest kills
     Player.recordKill(enemy.id);
+    pendingLoot = { gold, items: lootedItems, leveled, xp };
 
-    setTimeout(() => {
-      if (onWin) onWin({ xp, gold, items: lootedItems, leveled, enemy });
-    }, 1800);
+    setTimeout(() => showLootPanel(xp, gold, lootedItems, leveled), 1000);
+  }
+
+  function showLootPanel(xp, gold, items, leveled) {
+    document.getElementById('loot-xp-line').textContent = `+${xp} XP`;
+    document.getElementById('loot-gold-line').innerHTML =
+      `<span style="color:#ffd700">⬤</span> ${gold} Gold`;
+
+    const grid = document.getElementById('loot-items-grid');
+    if (items.length) {
+      grid.innerHTML = items.map(id => {
+        const item = ITEMS[id];
+        return item
+          ? `<div class="loot-item-box">${item.icon}<br><small>${item.name}</small></div>`
+          : '';
+      }).join('');
+    } else {
+      grid.innerHTML = '<div class="loot-empty">No items dropped.</div>';
+    }
+
+    document.getElementById('overlay-loot').classList.remove('hidden');
+  }
+
+  function collectLoot() {
+    if (!pendingLoot) return;
+    const p = Player.get();
+    const { gold, items, leveled, xp } = pendingLoot;
+
+    p.gold += gold;
+    items.forEach(id => Player.addToInventory(id));
+
+    document.getElementById('overlay-loot').classList.add('hidden');
+    pendingLoot = null;
+
+    if (onWin) onWin({ xp, gold, items, leveled, enemy });
   }
 
   function endPlayerTurn() {
@@ -611,5 +639,5 @@ const Combat = (() => {
     updateBars();
   }
 
-  return { start, playerAction, showSkills, showSpells, showItems, useSkill, useSpell, useItem, flee, showMainMenu };
+  return { start, playerAction, showSkills, showSpells, showItems, useSkill, useSpell, useItem, flee, showMainMenu, collectLoot };
 })();

@@ -157,10 +157,6 @@ const Game = (() => {
     }
   })();
 
-  // ===== AUTO-SAVE =====
-  setInterval(() => {
-    if (Player.get()) saveGame();
-  }, 30000);
 
   // Keyboard save
   document.addEventListener('keydown', e => {

@@ -22,7 +22,7 @@ const QUESTS = {
     objectives: [
       { id:'kill_alpha', type:'kill', mob:'alpha_wolf', count:1, current:0, label:'Defeat the Alpha Wolf (0/1)' }
     ],
-    rewards: { xp:200, gold:50, items:['iron_sword','chain_mail'] },
+    rewards: { xp:2000, gold:50, items:['iron_sword','chain_mail'] },
     followUp: null
   },
   q_spider_silk: {
@@ -142,6 +142,88 @@ const QUESTS = {
     rewards: { xp:5000, gold:1000, items:['void_scepter','assassin_daggers','champions_blade'] },
     followUp: null,
     finale: true
+  },
+
+  // Extra side quests
+  q_ratcatcher: {
+    id: 'q_ratcatcher',
+    title: 'Rats in the Rootcellar',
+    giverNpc: 'ranger_elowen',
+    zone: 'greenwood',
+    desc: 'Ranger Elowen wants the old rootcellar cleared before the rats spread into the grain stores.',
+    objectives: [
+      { id:'kill_rats', type:'kill', mob:'forest_rat', count:6, current:0, label:'Kill Forest Rats (0/6)' },
+      { id:'kill_scouts', type:'kill', mob:'goblin_scout', count:3, current:0, label:'Kill Goblin Scouts (0/3)' }
+    ],
+    rewards: { xp:90, gold:35, items:['boots_haste'] },
+    followUp: null
+  },
+  q_wraithlight: {
+    id: 'q_wraithlight',
+    title: 'Lights in the Mire',
+    giverNpc: 'reed_scout',
+    zone: 'ashfen',
+    desc: 'Reed Scout Toma has marked strange lights drifting through the marsh. They are wraiths, and they are getting closer.',
+    objectives: [
+      { id:'kill_wraiths', type:'kill', mob:'marsh_wraith', count:4, current:0, label:'Kill Marsh Wraiths (0/4)' },
+      { id:'kill_serpents_extra', type:'kill', mob:'venomfang_serpent', count:3, current:0, label:'Kill Venomfang Serpents (0/3)' }
+    ],
+    rewards: { xp:260, gold:80, items:['greater_mana_potion','orb_of_power'] },
+    followUp: null
+  },
+  q_shadow_pages: {
+    id: 'q_shadow_pages',
+    title: 'Pages of the Black Archive',
+    giverNpc: 'archivist_ren',
+    zone: 'ironspire',
+    desc: 'Archivist Ren believes the assassins are carrying pages from a forbidden archive. Take them back by force.',
+    objectives: [
+      { id:'kill_assassins_archive', type:'kill', mob:'shadow_assassin', count:4, current:0, label:'Kill Shadow Assassins (0/4)' },
+      { id:'kill_elementals_archive', type:'kill', mob:'fire_elemental', count:3, current:0, label:'Kill Fire Elementals (0/3)' }
+    ],
+    rewards: { xp:620, gold:180, items:['sapphire_ring','greater_health_potion'] },
+    followUp: null
+  },
+
+  // Zone 5 quests
+  q_abyss_patrol: {
+    id: 'q_abyss_patrol',
+    title: 'The Drowned Patrol',
+    giverNpc: 'captain_nere',
+    zone: 'sunken_abyss',
+    desc: 'Captain Nere asks you to put down the drowned sailors and their coral sentries before they breach the upper caverns.',
+    objectives: [
+      { id:'kill_drowned', type:'kill', mob:'drowned_sailor', count:5, current:0, label:'Kill Drowned Sailors (0/5)' },
+      { id:'kill_coral_guardians', type:'kill', mob:'coral_guardian', count:3, current:0, label:'Kill Coral Guardians (0/3)' }
+    ],
+    rewards: { xp:1100, gold:320, items:['heroic_health_potion','tidewalker_boots'] },
+    followUp: 'q_abyss_mages'
+  },
+  q_abyss_mages: {
+    id: 'q_abyss_mages',
+    title: 'Silence the Deep Choir',
+    giverNpc: 'captain_nere',
+    zone: 'sunken_abyss',
+    desc: 'The abyssal mages are singing the drowned kingdom awake. Silence them before the whole ruin rises.',
+    objectives: [
+      { id:'kill_abyss_mages', type:'kill', mob:'abyssal_mage', count:4, current:0, label:'Kill Abyssal Mages (0/4)' },
+      { id:'kill_tide_assassins', type:'kill', mob:'tide_assassin', count:4, current:0, label:'Kill Tide Assassins (0/4)' }
+    ],
+    rewards: { xp:1350, gold:420, items:['storm_elixir','pearl_of_focus'] },
+    followUp: null
+  },
+  q_leviathan_rises: {
+    id: 'q_leviathan_rises',
+    title: 'When the Leviathan Rises',
+    giverNpc: 'tide_seer',
+    zone: 'sunken_abyss',
+    desc: 'Tide-Seer Luma has seen Thalrassa wake beneath the city. Break the colossi and face the leviathan.',
+    objectives: [
+      { id:'kill_pearl_colossi', type:'kill', mob:'pearl_colossus', count:3, current:0, label:'Kill Pearl Colossi (0/3)' },
+      { id:'kill_leviathan', type:'kill', mob:'abyss_leviathan', count:1, current:0, label:'Defeat Thalrassa (0/1)' }
+    ],
+    rewards: { xp:4500, gold:1200, items:['crown_of_depths','leviathan_charm','storm_elixir'] },
+    followUp: null
   }
 };
 

@@ -37,8 +37,14 @@ const Player = (() => {
       bonusAgiPct: 0, bonusMaxHp: 0, bonusMaxMp: 0,
       lifeSteal: 0, dodgeChance: 0, attackPoison: 0, mpRegen: 0,
       // Skills & spells (populated by talents)
-      skills: [],
-      spells: [],
+      skills: spec === 'warrior' ? [
+        {id:'power_strike', name:'Power Strike', icon:'⚔️', type:'attack', dmgMult:1.3, mp:10, cooldown:1, cd:0, desc:'Heavy blow for 130% ATK.'}
+      ] : spec === 'rogue' ? [
+        {id:'sinister_strike', name:'Sinister Strike', icon:'🗡️', type:'attack', dmgMult:1.4, mp:8, cooldown:1, cd:0, desc:'Swift blow for 140% ATK.'}
+      ] : [],
+      spells: spec === 'mage' ? [
+        {id:'frostbolt', name:'Frostbolt', icon:'❄️', type:'magic', dmgMult:1.5, mp:15, cooldown:1, cd:0, desc:'Frost bolt for 150% INT damage.'}
+      ] : [],
       // Equipped items by slot
       equipped: { weapon:null, chest:null, head:null, offhand:null, ring:null, neck:null, feet:null, hands:null },
       // Inventory: array of { itemId, qty }

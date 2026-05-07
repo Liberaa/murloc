@@ -275,6 +275,17 @@
   </div>
 </div>
 
+<!-- Victory Loot Panel -->
+<div id="overlay-loot" class="overlay hidden">
+  <div class="panel-wow loot-panel">
+    <div class="loot-victory-title">⚔ VICTORY!</div>
+    <div id="loot-xp-line" class="loot-stat-line"></div>
+    <div id="loot-gold-line" class="loot-stat-line"></div>
+    <div id="loot-items-grid" class="loot-items-grid"></div>
+    <button class="btn-wow loot-collect-btn" onclick="Combat.collectLoot()">Collect &amp; Continue</button>
+  </div>
+</div>
+
 <!-- Notification toast -->
 <div id="toast" class="hidden"></div>
 
@@ -283,6 +294,7 @@
 <script src="js/data/zones.js"></script>
 <script src="js/data/quests.js"></script>
 <script src="js/data/talents.js"></script>
+<script src="js/data/content_ext.js"></script>
 <script src="js/player.js"></script>
 <script src="js/combat.js"></script>
 <script src="js/shop.js"></script>

@@ -10,7 +10,7 @@ const World = (() => {
   let zoneTransitionCooldown = 0;
   let initialized = false;
 
-  const PLAYER_SPEED = 160;
+  const PLAYER_SPEED = 460;
   const PLAYER_SIZE = 24;
   const MOB_SIZE = 22;
   const WORLD_W = 800;
@@ -77,22 +77,27 @@ const World = (() => {
   }
 
   // Basic mob pool — level 1-3, always beatable from the start
-  const BASIC_MOBS = ['forest_rat', 'goblin_scout', 'forest_wolf'];
-
-  // Greenwood is always safe. Every other zone spawns 1 basic enemy (80% chance)
-  // right at the player's entry edge so they walk into it as they explore.
   function placeEncounters(zone) {
-    if (zone.id === 'greenwood') return;
-    if (Math.random() >= 0.8) return; // 20% chance of empty zone
-
-    const p = Player.get();
-    const entryFromLeft = !p || p.x < WORLD_W / 2;
-    const x = entryFromLeft ? 150 : 650;
-    addEncounter(x);
+    if (!zone.mobs || !zone.mobs.length) return;
+    const count = zone.id === 'greenwood' ? 2 : 3;
+    const points = [...(zone.spawnPoints || [])].sort(() => Math.random() - 0.5);
+    for (let i = 0; i < Math.min(count, points.length); i++) {
+      addEncounter(points[i].x, pickZoneMob(zone));
+    }
   }
 
-  function addEncounter(x) {
-    const mobId = BASIC_MOBS[Math.floor(Math.random() * BASIC_MOBS.length)];
+  function pickZoneMob(zone) {
+    const weights = zone.mobWeights || zone.mobs.map(() => 1);
+    const total = weights.reduce((sum, weight) => sum + weight, 0);
+    let roll = Math.random() * total;
+    for (let i = 0; i < zone.mobs.length; i++) {
+      roll -= weights[i] || 1;
+      if (roll <= 0) return zone.mobs[i];
+    }
+    return zone.mobs[0];
+  }
+
+  function addEncounter(x, mobId) {
     const template = MOBS[mobId];
     if (!template) return;
     worldMobs.push({
