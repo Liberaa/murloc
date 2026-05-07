@@ -1,0 +1,293 @@
+1<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Murloc RPG</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===== TITLE SCREEN ===== -->
+<div id="screen-title" class="screen active">
+  <div class="title-bg"></div>
+  <div class="title-content">
+    <h1 class="game-title">MURLOC RPG</h1>
+    <p class="game-subtitle">A World of Adventure Awaits</p>
+    <button class="btn-wow" onclick="Game.showCharCreate()">New Game</button>
+    <button class="btn-wow" onclick="Game.loadGame()">Continue</button>
+  </div>
+</div>
+
+<!-- ===== CHARACTER CREATION ===== -->
+<div id="screen-charcreate" class="screen">
+  <div class="panel-wow charcreate-panel">
+    <h2 class="panel-title">Create Your Hero</h2>
+
+    <div class="charcreate-name">
+      <label>Name:</label>
+      <input type="text" id="char-name" maxlength="20" placeholder="Enter name..." class="input-wow">
+    </div>
+
+    <div class="spec-selection">
+      <h3>Choose Your Class</h3>
+      <div class="spec-cards">
+        <div class="spec-card" data-spec="warrior" onclick="CharCreate.selectSpec('warrior')">
+          <div class="spec-icon warrior-icon"></div>
+          <h4>Warrior</h4>
+          <p>Masters of melee combat. High armor and strength.</p>
+          <div class="spec-stats">
+            <span class="stat-pill str">STR ████</span>
+            <span class="stat-pill agi">AGI ██</span>
+            <span class="stat-pill int">INT █</span>
+          </div>
+        </div>
+        <div class="spec-card" data-spec="mage" onclick="CharCreate.selectSpec('mage')">
+          <div class="spec-icon mage-icon"></div>
+          <h4>Mage</h4>
+          <p>Wielders of arcane power. Devastating spells.</p>
+          <div class="spec-stats">
+            <span class="stat-pill str">STR █</span>
+            <span class="stat-pill agi">AGI ██</span>
+            <span class="stat-pill int">INT ████</span>
+          </div>
+        </div>
+        <div class="spec-card" data-spec="rogue" onclick="CharCreate.selectSpec('rogue')">
+          <div class="spec-icon rogue-icon"></div>
+          <h4>Rogue</h4>
+          <p>Swift and deadly. Strikes from the shadows.</p>
+          <div class="spec-stats">
+            <span class="stat-pill str">STR ██</span>
+            <span class="stat-pill agi">AGI ████</span>
+            <span class="stat-pill int">INT ██</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="charcreate-actions">
+      <button class="btn-wow" onclick="CharCreate.confirm()">Begin Adventure</button>
+      <button class="btn-wow btn-secondary" onclick="Game.showTitle()">Back</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== WORLD MAP ===== -->
+<div id="screen-world" class="screen">
+  <canvas id="game-canvas"></canvas>
+
+  <!-- HUD -->
+  <div id="hud">
+    <div id="hud-left">
+      <div id="player-portrait" class="portrait-frame">
+        <div id="portrait-icon"></div>
+        <div class="portrait-name" id="hud-name">Hero</div>
+        <div class="portrait-level" id="hud-level">Lv.1</div>
+      </div>
+      <div id="hud-bars">
+        <div class="bar-row">
+          <span class="bar-label">HP</span>
+          <div class="bar-track"><div id="bar-hp" class="bar-fill bar-hp"></div></div>
+          <span class="bar-val" id="val-hp">100/100</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">MP</span>
+          <div class="bar-track"><div id="bar-mp" class="bar-fill bar-mp"></div></div>
+          <span class="bar-val" id="val-mp">50/50</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">XP</span>
+          <div class="bar-track"><div id="bar-xp" class="bar-fill bar-xp"></div></div>
+          <span class="bar-val" id="val-xp">0/100</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="hud-center">
+      <div id="zone-name"></div>
+    </div>
+
+    <div id="hud-right">
+      <div id="hud-gold">
+        <span class="gold-icon">&#9679;</span>
+        <span id="val-gold">0</span>
+      </div>
+      <div id="hud-buttons">
+        <button class="hud-btn" onclick="UI.openInventory()" title="Inventory (I)">&#127869;</button>
+        <button class="hud-btn" onclick="UI.openTalents()" title="Talents (T)">&#11088;</button>
+        <button class="hud-btn" onclick="UI.openQuests()" title="Quests (Q)">&#128220;</button>
+        <button class="hud-btn" onclick="UI.openMap()" title="Map (M)">&#128506;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Minimap -->
+  <canvas id="minimap"></canvas>
+
+  <!-- Interaction prompt -->
+  <div id="interact-prompt" class="hidden">Press <kbd>E</kbd> to interact</div>
+
+  <!-- Combat log -->
+  <div id="combat-log"></div>
+</div>
+
+<!-- ===== COMBAT SCREEN ===== -->
+<div id="screen-combat" class="screen">
+  <div id="combat-scene">
+    <div id="combat-bg"></div>
+
+    <!-- Player side -->
+    <div id="combat-player-side">
+      <div id="combat-player-name" class="combatant-name"></div>
+      <div class="combatant-bars">
+        <div class="cbar-row">
+          <span>HP</span>
+          <div class="cbar-track"><div id="cbar-player-hp" class="cbar-fill cbar-hp"></div></div>
+          <span id="cbar-player-hp-val"></span>
+        </div>
+        <div class="cbar-row">
+          <span>MP</span>
+          <div class="cbar-track"><div id="cbar-player-mp" class="cbar-fill cbar-mp"></div></div>
+          <span id="cbar-player-mp-val"></span>
+        </div>
+      </div>
+      <div id="combat-player-sprite" class="combat-sprite"></div>
+    </div>
+
+    <!-- Enemy side -->
+    <div id="combat-enemy-side">
+      <div id="combat-enemy-name" class="combatant-name"></div>
+      <div class="combatant-bars">
+        <div class="cbar-row">
+          <span>HP</span>
+          <div class="cbar-track"><div id="cbar-enemy-hp" class="cbar-fill cbar-hp"></div></div>
+          <span id="cbar-enemy-hp-val"></span>
+        </div>
+      </div>
+      <div id="combat-enemy-sprite" class="combat-sprite enemy-sprite"></div>
+    </div>
+  </div>
+
+  <!-- Combat damage numbers -->
+  <div id="damage-numbers"></div>
+
+  <!-- Combat menu -->
+  <div id="combat-ui">
+    <div id="combat-menu">
+      <div id="combat-main-menu">
+        <button class="combat-btn" onclick="Combat.playerAction('attack')">&#9876; Attack</button>
+        <button class="combat-btn" onclick="Combat.showSkills()">&#9889; Skills</button>
+        <button class="combat-btn" onclick="Combat.showSpells()">&#10024; Spells</button>
+        <button class="combat-btn" onclick="Combat.showItems()">&#127864; Items</button>
+        <button class="combat-btn combat-btn-flee" onclick="Combat.flee()">&#128062; Flee</button>
+      </div>
+      <div id="combat-sub-menu" class="hidden"></div>
+    </div>
+    <div id="combat-log-box">
+      <div id="combat-log-text"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== OVERLAYS ===== -->
+
+<!-- Inventory -->
+<div id="overlay-inventory" class="overlay hidden">
+  <div class="panel-wow overlay-panel">
+    <div class="panel-header">
+      <span class="panel-title">Inventory</span>
+      <button class="close-btn" onclick="UI.closeAll()">&#10005;</button>
+    </div>
+    <div id="inventory-grid" class="inventory-grid"></div>
+    <div id="item-tooltip" class="item-tooltip hidden"></div>
+    <div class="inventory-footer">
+      <span class="gold-icon">&#9679;</span> <span id="inv-gold">0</span> Gold
+    </div>
+  </div>
+</div>
+
+<!-- Talents -->
+<div id="overlay-talents" class="overlay hidden">
+  <div class="panel-wow overlay-panel talent-panel">
+    <div class="panel-header">
+      <span class="panel-title">Talents</span>
+      <button class="close-btn" onclick="UI.closeAll()">&#10005;</button>
+    </div>
+    <div id="talent-points-info"></div>
+    <div id="talent-tree"></div>
+  </div>
+</div>
+
+<!-- Quests -->
+<div id="overlay-quests" class="overlay hidden">
+  <div class="panel-wow overlay-panel">
+    <div class="panel-header">
+      <span class="panel-title">Quest Journal</span>
+      <button class="close-btn" onclick="UI.closeAll()">&#10005;</button>
+    </div>
+    <div id="quest-list"></div>
+    <div id="quest-detail"></div>
+  </div>
+</div>
+
+<!-- Map -->
+<div id="overlay-map" class="overlay hidden">
+  <div class="panel-wow overlay-panel map-panel">
+    <div class="panel-header">
+      <span class="panel-title">World Map</span>
+      <button class="close-btn" onclick="UI.closeAll()">&#10005;</button>
+    </div>
+    <div id="world-map-display"></div>
+  </div>
+</div>
+
+<!-- Shop -->
+<div id="overlay-shop" class="overlay hidden">
+  <div class="panel-wow overlay-panel shop-panel">
+    <div class="panel-header">
+      <span class="panel-title" id="shop-title">Shop</span>
+      <button class="close-btn" onclick="UI.closeAll()">&#10005;</button>
+    </div>
+    <div id="shop-items"></div>
+    <div class="shop-footer">
+      <span>Your Gold: </span><span class="gold-icon">&#9679;</span><span id="shop-gold">0</span>
+    </div>
+  </div>
+</div>
+
+<!-- Quest dialog -->
+<div id="overlay-dialog" class="overlay hidden">
+  <div class="dialog-box">
+    <div class="dialog-npc-name" id="dialog-npc-name"></div>
+    <div class="dialog-portrait" id="dialog-portrait"></div>
+    <div class="dialog-text" id="dialog-text"></div>
+    <div class="dialog-actions" id="dialog-actions"></div>
+  </div>
+</div>
+
+<!-- Level up -->
+<div id="overlay-levelup" class="overlay hidden">
+  <div class="levelup-box">
+    <div class="levelup-title">LEVEL UP!</div>
+    <div class="levelup-level" id="levelup-number"></div>
+    <div class="levelup-stats" id="levelup-stats"></div>
+    <button class="btn-wow" onclick="UI.closeLevelUp()">Awesome!</button>
+  </div>
+</div>
+
+<!-- Notification toast -->
+<div id="toast" class="hidden"></div>
+
+<script src="js/data/items.js"></script>
+<script src="js/data/mobs.js"></script>
+<script src="js/data/zones.js"></script>
+<script src="js/data/quests.js"></script>
+<script src="js/data/talents.js"></script>
+<script src="js/player.js"></script>
+<script src="js/combat.js"></script>
+<script src="js/shop.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/world.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>
