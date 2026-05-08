@@ -7,10 +7,12 @@ yarn.lock
 pnpm-lock.yaml
 bun.lockb
 
+
 # Environment variables
 .env
 .env.local
 .env.*.local
+.claude
 
 # Logs
 logs/

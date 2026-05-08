@@ -44,7 +44,7 @@ const Combat = (() => {
     [...p.skills, ...p.spells].forEach(s => { skillCooldowns[s.id] = 0; });
 
     renderCombatScreen();
-    addLog(`You encounter ${enemy.name}!`, 'system');
+    addLog(enemy.encounterMsg || `You encounter ${enemy.name}!`, 'system');
     addLog('Choose your action.', 'system');
 
     // Show main menu
@@ -81,10 +81,11 @@ const Combat = (() => {
     const ps = document.getElementById('combat-player-sprite');
     ps.className = 'combat-sprite sprite-' + p.spec;
 
-    // Set enemy sprite color via inline style
+    // Set enemy sprite
     const es = document.getElementById('combat-enemy-sprite');
-    es.className = 'combat-sprite enemy-sprite';
-    es.style.filter = `hue-rotate(${enemy.hueRotate||0}deg)`;
+    es.className = 'combat-sprite enemy-sprite' + (enemy.sprite ? ' has-sprite' : '');
+    es.style.filter = enemy.sprite ? '' : `hue-rotate(${enemy.hueRotate||0}deg)`;
+    es.style.backgroundImage = enemy.sprite ? `url('/img/${enemy.sprite}')` : '';
 
     updateBars();
   }

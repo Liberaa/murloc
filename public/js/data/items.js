@@ -110,4 +110,26 @@ const ITEMS = {
   stormgod_handwraps:    { id:'stormgod_handwraps',    name:'Stormgod Handwraps', icon:'S', type:'armor', slot:'hands', quality:'legendary', value:3000, stats:{atk:30, int:30, agi:22, mp:160, crit:18}, desc:'Wraps that make every spell feel overcharged.' },
   eternity_chain:        { id:'eternity_chain',        name:'Eternity Chain', icon:'E', type:'armor', slot:'neck', quality:'legendary', value:3100, stats:{atk:24, def:24, int:28, hp:220, mp:220, crit:14}, desc:'A chain that has already survived tomorrow.' },
   mythic_star_signet:    { id:'mythic_star_signet',    name:'Mythic Star Signet', icon:'R', type:'armor', slot:'ring', quality:'legendary', value:2950, stats:{atk:18, def:18, int:22, agi:18, crit:20}, desc:'A ring bright enough to count as a strategy.' },
+
+  // Gloomcrag consumable
+  mushroom_brew:         { id:'mushroom_brew', name:'Mushroom Brew', icon:'🍄', type:'consumable', quality:'uncommon', value:25, desc:'Restores 80 HP and 60 MP. Tastes like the dark.', effect:{hp:80, mp:60} },
+
+  // Gloomcrag gear
+  crystal_spire_shard:   { id:'crystal_spire_shard', name:'Crystal Spire Shard', icon:'💎', type:'weapon', slot:'weapon', quality:'rare', value:285, stats:{atk:22, int:22, crit:10}, desc:'A razor shard of cave crystal. Fits every grip.' },
+  gloom_carapace:        { id:'gloom_carapace', name:'Gloom Carapace', icon:'🪲', type:'armor', slot:'chest', quality:'rare', value:270, stats:{def:26, hp:90, agi:6}, desc:'Repurposed from something that used to own this cave.' },
+  cave_pearl_ring:       { id:'cave_pearl_ring', name:'Cave Pearl Ring', icon:'💍', type:'armor', slot:'ring', quality:'uncommon', value:88, stats:{hp:55, mp:30, def:6}, desc:'A smooth pearl found very deep. Slightly suspicious.' },
+  cave_charm:            { id:'cave_charm', name:"Spelunker's Charm", icon:'🕯️', type:'armor', slot:'neck', quality:'rare', value:250, stats:{atk:10, def:10, hp:60, mp:40, crit:6}, desc:"Carried by explorers who came back. Most don't." },
+
+  // Cinderpeak weapons
+  magma_pick:            { id:'magma_pick', name:'Magma Pick', icon:'⛏️', type:'weapon', slot:'weapon', quality:'rare', value:355, stats:{atk:46, def:8, str:8}, desc:'A pickaxe heated past usefulness and into power.', class:['warrior'] },
+  emberstone_wand:       { id:'emberstone_wand', name:'Emberstone Wand', icon:'🪄', type:'weapon', slot:'weapon', quality:'rare', value:350, stats:{atk:11, int:50, mp:80, crit:8}, desc:'The gemstone in the tip was technically lava yesterday.', class:['mage'] },
+  cinder_fangs:          { id:'cinder_fangs', name:'Cinder Fangs', icon:'🔪', type:'weapon', slot:'weapon', quality:'rare', value:345, stats:{atk:38, agi:24, crit:14}, desc:'Blades that retain forge heat for exactly three stabs.', class:['rogue'] },
+  ashplate:              { id:'ashplate', name:'Ashplate Cuirass', icon:'🦺', type:'armor', slot:'chest', quality:'rare', value:335, stats:{def:30, hp:100, atk:8}, desc:'Forged in the hottest part of the cave. Cooled eventually.', class:['warrior'] },
+  heat_cloak:            { id:'heat_cloak', name:'Heatward Cloak', icon:'🧥', type:'armor', slot:'neck', quality:'rare', value:295, stats:{def:14, hp:80, mp:50, int:10}, desc:'Lined with something that makes fire politely back off.' },
+  lava_band:             { id:'lava_band', name:'Lava Band', icon:'💍', type:'armor', slot:'ring', quality:'rare', value:275, stats:{atk:14, def:10, crit:8, hp:50}, desc:'Still warm. Probably fine.' },
+
+  // Easter egg items
+  mrggl_idol:            { id:'mrggl_idol', name:"Mrggl's Idol", icon:'🐟', type:'armor', slot:'neck', quality:'legendary', value:999, stats:{atk:20, def:20, int:20, agi:20, crit:15, hp:120, mp:120}, desc:"MRGGLGLGL. Protects its wearer by confusing everyone nearby." },
+  mimic_key:             { id:'mimic_key', name:'Suspicious Gold Key', icon:'🗝️', type:'consumable', quality:'uncommon', value:150, desc:"Dropped by a chest that fought back. Restores 1 HP and a lot of questions.", effect:{hp:1} },
+  boblin_supply:         { id:'boblin_supply', name:"Boblin's Personal Snacks", icon:'🎒', type:'consumable', quality:'uncommon', value:50, desc:'Restores 250 HP. Tastes like being in the wrong dimension.', effect:{hp:250} },
 };

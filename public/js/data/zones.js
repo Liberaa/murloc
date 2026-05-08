@@ -25,7 +25,8 @@ const ZONES = [
     ],
     shopId: 'shop_greenwood',
     tileLayout: 'forest',
-    spawnPoints: [{x:100,y:300},{x:200,y:350},{x:350,y:280},{x:500,y:320},{x:600,y:290}]
+    spawnPoints: [{x:100,y:300},{x:200,y:350},{x:350,y:280},{x:500,y:320},{x:600,y:290}],
+    caves: [{ id:'cave_gloomcrag', name:'Gloomcrag Caverns', x:700, toZone:'gloomcrag', entryX:700 }]
   },
   {
     id: 'moonfall_hollow',
@@ -154,7 +155,8 @@ const ZONES = [
     ],
     shopId: 'shop_ironspire',
     tileLayout: 'ruins',
-    spawnPoints: [{x:130,y:300},{x:280,y:350},{x:420,y:280},{x:560,y:330},{x:680,y:295}]
+    spawnPoints: [{x:130,y:300},{x:280,y:350},{x:420,y:280},{x:560,y:330},{x:680,y:295}],
+    caves: [{ id:'cave_cinderpeak', name:'Cinderpeak Forge', x:660, toZone:'cinderpeak', entryX:700 }]
   },
   {
     id: 'chaos_throne',
@@ -207,6 +209,57 @@ const ZONES = [
     shopId: 'shop_abyss',
     tileLayout: 'abyss',
     spawnPoints: [{x:115,y:315},{x:245,y:355},{x:390,y:295},{x:535,y:340},{x:675,y:300}]
+  },
+  {
+    id: 'gloomcrag',
+    name: 'Gloomcrag Caverns',
+    desc: 'Dark crystal caves beneath Greenwood. Something old and hungry guards the deepest chamber.',
+    levelRange: [3, 7],
+    unlockLevel: 1,
+    bgColor: '#080610',
+    groundColor: '#120e1e',
+    accent: '#5a3a8a',
+    icon: '⛏',
+    mobs: ['cave_bat', 'crystal_crawler', 'gloom_gnoll', 'deep_mushroom_shaman', 'cave_mimic', 'tiny_murloc'],
+    mobWeights: [4, 3, 2, 2, 1, 1],
+    boss: 'grubtha_cave_matriarch',
+    bossDefeated: false,
+    npcs: [
+      { id:'miner_breck', name:'Miner Breck', icon:'⛏', x:185, y:250, dialog:'start_quest_cave_shadows', type:'quest' },
+      { id:'crystal_vendor_nix', name:'Nix the Crystal Vendor', icon:'💎', x:560, y:235, type:'shop', shopId:'shop_gloomcrag' },
+      { id:'boblin', name:'???', icon:'?', x:720, y:250, dialog:'boblin_dialog', type:'quest' }
+    ],
+    exits: [
+      { label:'<- Cave Exit', toZone:'greenwood', x:50, y:300, unlockLevel:1 }
+    ],
+    shopId: 'shop_gloomcrag',
+    tileLayout: 'cave',
+    spawnPoints: [{x:120,y:315},{x:265,y:350},{x:480,y:300},{x:635,y:340}]
+  },
+  {
+    id: 'cinderpeak',
+    name: 'Cinderpeak Forge',
+    desc: 'A volcanic cave-forge beneath Ironspire, where fire imps and lava beasts guard ancient metal.',
+    levelRange: [7, 11],
+    unlockLevel: 1,
+    bgColor: '#120500',
+    groundColor: '#200a00',
+    accent: '#cc4400',
+    icon: '🔥',
+    mobs: ['fire_imp', 'lava_salamander', 'cinder_golem', 'magma_wraith'],
+    mobWeights: [3, 3, 2, 2],
+    boss: 'embrix_ashen_drake',
+    bossDefeated: false,
+    npcs: [
+      { id:'forge_keeper_hex', name:'Forge Keeper Hex', icon:'🔥', x:205, y:250, dialog:'start_quest_cinder_flames', type:'quest' },
+      { id:'cinder_vendor_mox', name:'Mox the Cinder Vendor', icon:'🪙', x:575, y:235, type:'shop', shopId:'shop_cinderpeak' }
+    ],
+    exits: [
+      { label:'<- Forge Exit', toZone:'ironspire', x:50, y:300, unlockLevel:1 }
+    ],
+    shopId: 'shop_cinderpeak',
+    tileLayout: 'cinder',
+    spawnPoints: [{x:130,y:315},{x:285,y:345},{x:490,y:305},{x:645,y:335}]
   }
 ];
 
@@ -239,5 +292,13 @@ const SHOPS = {
   shop_abyss: {
     name: 'Iri\'s Pearl Exchange',
     items: ['heroic_health_potion','heroic_mana_potion','storm_elixir','sunken_trident','stormcaller_rod','reefrazor_twins','tideplate_cuirass','astralweave_robes','duskstalker_jacket','crown_of_depths','leviathan_charm','pearl_of_focus','tidewalker_boots']
+  },
+  shop_gloomcrag: {
+    name: "Nix's Crystal Exchange",
+    items: ['mushroom_brew','health_potion','mana_potion','bandage','antidote','cave_pearl_ring','crystal_spire_shard','gloom_carapace','cave_charm']
+  },
+  shop_cinderpeak: {
+    name: "Mox's Forge Goods",
+    items: ['heroic_health_potion','heroic_mana_potion','storm_elixir','health_potion','mana_potion','magma_pick','emberstone_wand','cinder_fangs','ashplate','heat_cloak','lava_band']
   }
 };

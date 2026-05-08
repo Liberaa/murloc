@@ -9,6 +9,9 @@ const World = (() => {
   let spawnImmunity = 0;
   let zoneTransitionCooldown = 0;
   let initialized = false;
+  const KONAMI_CODE = ['arrowup','arrowup','arrowdown','arrowdown','arrowleft','arrowright','arrowleft','arrowright','b','a'];
+  let konamiSeq = [];
+  let towerClicks = 0, towerClickTimer = null;
 
   const PLAYER_SPEED = 460;
   const PLAYER_SIZE = 24;
@@ -17,6 +20,16 @@ const World = (() => {
   const WORLD_H = 440;
   const GROUND_Y = 350; // fixed y for player and mobs
   const ZONE_TRANSITION_LOCK = 0.25;
+
+  const spriteCache = {};
+  function getSprite(path) {
+    if (!spriteCache[path]) {
+      const img = new Image();
+      img.src = '/img/' + path;
+      spriteCache[path] = img;
+    }
+    return spriteCache[path];
+  }
 
   function init() {
     if (initialized) return; // prevent duplicate listeners
@@ -53,6 +66,29 @@ const World = (() => {
     window.addEventListener('blur', clearMovementKeys);
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) clearMovementKeys();
+    });
+
+    // Easter egg: Konami code
+    window.addEventListener('keydown', e => {
+      konamiSeq.push(e.key.toLowerCase());
+      if (konamiSeq.length > KONAMI_CODE.length) konamiSeq.shift();
+      if (konamiSeq.join(',') === KONAMI_CODE.join(',')) {
+        konamiSeq = [];
+        const p = Player.get();
+        if (p) { p.gold += 500; Player.addToInventory('mushroom_brew', 5); UI.updateHUD(); }
+        UI.toast('🎮 KONAMI CODE! +500g and a bag of cave mushrooms!', 5000);
+      }
+    });
+
+    // Easter egg: click the tower 5 times
+    canvas.addEventListener('click', e => {
+      if (!Player.get() || !document.getElementById('screen-world').classList.contains('active')) return;
+      if (Math.abs(e.clientX - canvas.width / 2) < 60 * (canvas.width / 800)) {
+        towerClicks++;
+        clearTimeout(towerClickTimer);
+        towerClickTimer = setTimeout(() => { towerClicks = 0; }, 2500);
+        if (towerClicks >= 5) { towerClicks = 0; UI.toast('"Please stop clicking me." — The Tower', 4000); }
+      }
     });
   }
 
@@ -134,6 +170,7 @@ const World = (() => {
       level: template.level,
       color: template.color || '#888',
       boss: template.boss || false,
+      sprite: template.sprite || null,
       uid: Math.random().toString(36).slice(2)
     });
   }
@@ -240,6 +277,14 @@ const World = (() => {
       if (distX < 60) nearest = { type: 'boss', data: { mobId: zone.boss } };
     }
 
+    // Cave entrances
+    if (zone.caves) {
+      zone.caves.forEach(cave => {
+        const distX = Math.abs(p.x - cave.x);
+        if (distX < nearestDistX) { nearestDistX = distX; nearest = { type: 'cave', data: cave }; }
+      });
+    }
+
     interactTarget = nearest;
     const prompt = document.getElementById('interact-prompt');
     if (nearest) prompt.classList.remove('hidden');
@@ -269,6 +314,8 @@ const World = (() => {
       else if (data.type === 'quest') UI.interactQuestNpc(data);
     } else if (type === 'boss') {
       Game.startCombat(data.mobId);
+    } else if (type === 'cave') {
+      Game.changeZone(data.toZone, data.entryX || 700);
     }
   }
 
@@ -305,6 +352,9 @@ const World = (() => {
 
     // Zone decor
     drawDecor(zone, sx, sy);
+
+    // Cave entrances
+    drawCaves(zone, p, sx, sy);
 
     // Zone edge transition arrows
     drawEdgeArrows(zone, p, sx, sy);
@@ -436,6 +486,60 @@ const World = (() => {
         ctx.fillStyle = 'rgba(255,220,120,0.25)';
         ctx.beginPath(); ctx.arc(x * sx, y * sy, 40 * sx, 0, Math.PI * 2); ctx.fill();
       });
+    } else if (zone.tileLayout === 'cave') {
+      // Stalactites hanging from ceiling
+      [[80, 10], [200, 28], [345, 6], [510, 22], [665, 12], [750, 32]].forEach(([x, y]) => {
+        ctx.fillStyle = '#1e1530';
+        ctx.beginPath();
+        ctx.moveTo((x - 9) * sx, y * sy);
+        ctx.lineTo((x + 9) * sx, y * sy);
+        ctx.lineTo(x * sx, (y + 52) * sy);
+        ctx.closePath();
+        ctx.fill();
+      });
+      // Crystal spire clusters on the floor
+      [[145, 305], [305, 332], [470, 308], [620, 328]].forEach(([x, y]) => {
+        ctx.fillStyle = 'rgba(130, 80, 220, 0.65)';
+        ctx.beginPath();
+        ctx.moveTo(x * sx, (y - 34) * sy);
+        ctx.lineTo((x + 10) * sx, y * sy);
+        ctx.lineTo((x - 10) * sx, y * sy);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = 'rgba(200, 140, 255, 0.28)';
+        ctx.beginPath();
+        ctx.arc(x * sx, (y - 34) * sy, 9 * sx, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      // Stone pillars
+      [[92, 248], [698, 252]].forEach(([x, y]) => {
+        ctx.fillStyle = '#16102a';
+        ctx.fillRect((x - 10) * sx, y * sy, 20 * sx, 92 * sy);
+        ctx.fillStyle = '#261c3e';
+        ctx.fillRect((x - 13) * sx, y * sy, 26 * sx, 11 * sy);
+      });
+    } else if (zone.tileLayout === 'cinder') {
+      // Glowing lava pools
+      [[128, 338], [412, 356], [622, 332]].forEach(([x, y]) => {
+        const g = ctx.createRadialGradient(x * sx, y * sy, 0, x * sx, y * sy, 36 * sx);
+        g.addColorStop(0, 'rgba(255,155,0,0.88)');
+        g.addColorStop(0.5, 'rgba(220,60,0,0.6)');
+        g.addColorStop(1, 'rgba(140,0,0,0)');
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.ellipse(x * sx, y * sy, 36 * sx, 15 * sy, 0, 0, Math.PI * 2); ctx.fill();
+      });
+      // Volcanic columns
+      [[88, 198], [708, 203], [352, 185]].forEach(([x, y]) => {
+        ctx.fillStyle = '#1c0800';
+        ctx.fillRect((x - 10) * sx, y * sy, 20 * sx, 108 * sy);
+        ctx.fillStyle = 'rgba(255,95,0,0.55)';
+        ctx.beginPath(); ctx.ellipse(x * sx, y * sy, 13 * sx, 27 * sy, 0, 0, Math.PI * 2); ctx.fill();
+      });
+      // Ash piles on the ground
+      [[212, 350], [542, 366]].forEach(([x, y]) => {
+        ctx.fillStyle = 'rgba(90,70,55,0.48)';
+        ctx.beginPath(); ctx.ellipse(x * sx, y * sy, 32 * sx, 12 * sy, 0, 0, Math.PI * 2); ctx.fill();
+      });
     }
   }
 
@@ -446,6 +550,65 @@ const World = (() => {
     ctx.beginPath(); ctx.arc(x, y, 22 * sx, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = '#3a7a2a';
     ctx.beginPath(); ctx.arc(x - 5 * sx, y - 5 * sx, 14 * sx, 0, Math.PI * 2); ctx.fill();
+  }
+
+  function drawCaves(zone, p, sx, sy) {
+    if (!zone.caves) return;
+    zone.caves.forEach(cave => drawCaveEntrance(cave, p, sx, sy));
+  }
+
+  function drawCaveEntrance(cave, p, sx, sy) {
+    const wx = cave.x * sx;
+    const baseY = GROUND_Y * sy;
+    const near = Math.abs(p.x - cave.x) < 70;
+
+    // Rock mound behind the arch
+    ctx.fillStyle = '#2a1e3c';
+    ctx.beginPath();
+    ctx.arc(wx, baseY - 20 * sy, 36 * sx, Math.PI, 0, false);
+    ctx.lineTo(wx + 36 * sx, baseY + 5 * sy);
+    ctx.lineTo(wx - 36 * sx, baseY + 5 * sy);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#4a3860';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Dark arch opening
+    const aw = 20 * sx;
+    ctx.fillStyle = '#04020a';
+    ctx.beginPath();
+    ctx.arc(wx, baseY - 5 * sy, aw, Math.PI, 0, false);
+    ctx.lineTo(wx + aw, baseY + 3 * sy);
+    ctx.lineTo(wx - aw, baseY + 3 * sy);
+    ctx.closePath();
+    ctx.fill();
+
+    // Arch rim with proximity glow
+    ctx.strokeStyle = near ? '#cc88ff' : '#6633aa';
+    ctx.lineWidth = near ? 2.5 : 1.5;
+    ctx.beginPath();
+    ctx.arc(wx, baseY - 5 * sy, aw + 2 * sx, Math.PI, 0, false);
+    ctx.stroke();
+
+    // Crystal glints inside the mound
+    [[-14, -28], [10, -34], [-3, -42]].forEach(([dx, dy]) => {
+      ctx.fillStyle = near ? 'rgba(215, 155, 255, 0.95)' : 'rgba(150, 100, 200, 0.5)';
+      ctx.beginPath();
+      ctx.arc(wx + dx * sx, baseY + dy * sy, 2.5 * sx, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // Label and prompt
+    ctx.textAlign = 'center';
+    ctx.fillStyle = near ? '#ddbeff' : '#997acc';
+    ctx.font = `bold ${9 * sx}px Georgia`;
+    ctx.fillText('⛏ ' + cave.name, wx, baseY - 48 * sy);
+    if (near) {
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `${8 * sx}px Georgia`;
+      ctx.fillText('[E] Enter Cave', wx, baseY - 59 * sy);
+    }
   }
 
   function drawNPCs(zone, p, sx, sy) {
@@ -555,19 +718,32 @@ const World = (() => {
       ctx.fillStyle = 'rgba(0,0,0,0.25)';
       ctx.beginPath(); ctx.arc(wx, wy + 12 * sy, 9 * sx, 0, Math.PI * 2); ctx.fill();
 
-      // Body
-      ctx.fillStyle = mob.color;
-      ctx.beginPath(); ctx.arc(wx, wy, 13 * sx, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = '#ffffff33'; ctx.lineWidth = 1; ctx.stroke();
-
-      // Icon
-      ctx.font = `${15 * sx}px serif`;
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText(mob.icon, wx, wy);
+      if (mob.sprite) {
+        const img = getSprite(mob.sprite);
+        if (img.complete && img.naturalWidth > 0) {
+          const drawH = 52 * sy;
+          const drawW = (img.naturalWidth / img.naturalHeight) * drawH;
+          ctx.drawImage(img, wx - drawW / 2, wy + 12 * sy - drawH, drawW, drawH);
+        } else {
+          // Fallback circle while image loads
+          ctx.fillStyle = mob.color;
+          ctx.beginPath(); ctx.arc(wx, wy, 13 * sx, 0, Math.PI * 2); ctx.fill();
+        }
+      } else {
+        // Body
+        ctx.fillStyle = mob.color;
+        ctx.beginPath(); ctx.arc(wx, wy, 13 * sx, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#ffffff33'; ctx.lineWidth = 1; ctx.stroke();
+        // Icon
+        ctx.font = `${15 * sx}px serif`;
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(mob.icon, wx, wy);
+      }
 
       // Level + name
       ctx.fillStyle = '#ffaa88'; ctx.font = `${8 * sx}px Georgia`;
-      ctx.fillText(`Lv.${mob.level} ${mob.name}`, wx, wy - 20 * sy);
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(`Lv.${mob.level} ${mob.name}`, wx, wy - 24 * sy);
     });
   }
 

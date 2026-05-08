@@ -200,3 +200,105 @@ TALENT_TREES.rogue.push({
     }
   ]
 });
+
+// ===== GLOOMCRAG + CINDERPEAK QUESTS =====
+Object.assign(QUESTS, {
+  q_cave_shadows: {
+    id: 'q_cave_shadows',
+    title: 'Things in the Dark',
+    giverNpc: 'miner_breck',
+    zone: 'gloomcrag',
+    desc: "Miner Breck went in looking for crystal veins. He found bats, gnolls, and something that pretended to be a chest. Clear the cave so he can work.",
+    objectives: [
+      { id:'kill_cave_bats', type:'kill', mob:'cave_bat', count:4, current:0, label:'Kill Cave Bats (0/4)' },
+      { id:'kill_gloom_gnolls', type:'kill', mob:'gloom_gnoll', count:3, current:0, label:'Kill Gloom Gnolls (0/3)' }
+    ],
+    rewards: { xp:340, gold:90, items:['mushroom_brew','mushroom_brew','cave_pearl_ring'] },
+    followUp: 'q_cave_matriarch'
+  },
+  q_cave_matriarch: {
+    id: 'q_cave_matriarch',
+    title: 'Queen of the Deep',
+    giverNpc: 'miner_breck',
+    zone: 'gloomcrag',
+    desc: "Something enormous has been at the heart of the cave the whole time. Breck heard the legs before he saw the size. Kill Grubtha.",
+    objectives: [
+      { id:'kill_crystal_crawlers', type:'kill', mob:'crystal_crawler', count:3, current:0, label:'Kill Crystal Crawlers (0/3)' },
+      { id:'kill_grubtha', type:'kill', mob:'grubtha_cave_matriarch', count:1, current:0, label:'Defeat Grubtha (0/1)' }
+    ],
+    rewards: { xp:780, gold:200, items:['crystal_spire_shard','gloom_carapace'] },
+    followUp: null
+  },
+  q_cinder_flames: {
+    id: 'q_cinder_flames',
+    title: 'The Forge Burns',
+    giverNpc: 'forge_keeper_hex',
+    zone: 'cinderpeak',
+    desc: "Forge Keeper Hex watched the imps move in and set everything on fire. That is technically how forges work, but these are the wrong imps. Clear them out.",
+    objectives: [
+      { id:'kill_fire_imps', type:'kill', mob:'fire_imp', count:4, current:0, label:'Kill Fire Imps (0/4)' },
+      { id:'kill_lava_salamanders', type:'kill', mob:'lava_salamander', count:3, current:0, label:'Kill Lava Salamanders (0/3)' }
+    ],
+    rewards: { xp:620, gold:175, items:['heroic_health_potion','lava_band'] },
+    followUp: 'q_ashen_drake'
+  },
+  q_ashen_drake: {
+    id: 'q_ashen_drake',
+    title: 'Embrix Must Fall',
+    giverNpc: 'forge_keeper_hex',
+    zone: 'cinderpeak',
+    desc: "The drake Embrix claimed the deepest forge chamber as a nest. The cinder golems answer to it now. Kill it before the whole peak collapses.",
+    objectives: [
+      { id:'kill_cinder_golems', type:'kill', mob:'cinder_golem', count:3, current:0, label:'Kill Cinder Golems (0/3)' },
+      { id:'kill_embrix', type:'kill', mob:'embrix_ashen_drake', count:1, current:0, label:'Defeat Embrix (0/1)' }
+    ],
+    rewards: { xp:1600, gold:480, items:['magma_pick','emberstone_wand','cinder_fangs'] },
+    followUp: null
+  },
+  q_boblin_snacks: {
+    id: 'q_boblin_snacks',
+    title: 'From the Wrong Dimension',
+    giverNpc: 'boblin',
+    zone: 'gloomcrag',
+    desc: "Boblin shouldn't be here. He knows it. You know it. He's coping by giving away his snacks.",
+    objectives: [],
+    rewards: { xp:0, gold:0, items:['boblin_supply','boblin_supply','boblin_supply'] },
+    followUp: null
+  }
+});
+
+Object.assign(DIALOGS, {
+  start_quest_cave_shadows: {
+    npc: 'Miner Breck',
+    portrait: '⛏',
+    lines: [
+      "I came in here for crystals. Very valuable, very pretty, very profitable.",
+      "There are bats everywhere. Gnolls moved in. Something pretended to be a chest and nearly took my hand.",
+      "Clear them out and we split the crystal profits. Mostly my profits, but still."
+    ],
+    acceptQuest: 'q_cave_shadows',
+    declineText: 'Sounds dark.'
+  },
+  start_quest_cinder_flames: {
+    npc: 'Forge Keeper Hex',
+    portrait: '🔥',
+    lines: [
+      "I have been keeping this forge for thirty years. Imps, dragons, lava — fine. Normal cave stuff.",
+      "But THESE imps knocked over my tools. That is where I draw the line.",
+      "Kill them. Then kill whatever big thing is at the bottom. It's always something big."
+    ],
+    acceptQuest: 'q_cinder_flames',
+    declineText: 'It is very hot in here.'
+  },
+  boblin_dialog: {
+    npc: 'Boblin',
+    portrait: '?',
+    lines: [
+      "I should NOT be here.",
+      "I was supposed to be in a completely different game. Different genre, different continent, different everything.",
+      "Here, take my snacks. I have nowhere to put them and this cave is not helping."
+    ],
+    acceptQuest: 'q_boblin_snacks',
+    declineText: 'That explains a lot.'
+  }
+});

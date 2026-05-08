@@ -500,6 +500,15 @@ body {
   border: 2px solid #88bb44;
 }
 
+/* Enemy sprite image */
+.has-sprite::before, .has-sprite::after { display: none !important; }
+.has-sprite {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  image-rendering: pixelated;
+}
+
 /* Dynamic class sprites */
 .sprite-warrior::before { background: radial-gradient(ellipse at 50% 30%, #ff9944 0%, #cc4400 60%, #661100 100%) !important; }
 .sprite-warrior::after { background: radial-gradient(circle, #ffaa66, #cc4400) !important; border-color: #ff8833 !important; }
