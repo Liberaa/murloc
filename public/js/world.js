@@ -616,19 +616,31 @@ const World = (() => {
       const wx = npc.x * sx, wy = (GROUND_Y - 15) * sy;
       const near = Math.abs(p.x - npc.x) < 70;
 
-      // Shadow (use arc, not ellipse, for max compatibility)
+      // Shadow
       ctx.fillStyle = 'rgba(0,0,0,0.3)';
       ctx.beginPath(); ctx.arc(wx, wy + 16 * sy, 10 * sx, 0, Math.PI * 2); ctx.fill();
 
-      // Body circle
-      ctx.fillStyle = near ? '#ffee88' : '#ccaa44';
-      ctx.beginPath(); ctx.arc(wx, wy, 15 * sx, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = '#ffd700'; ctx.lineWidth = 1.5; ctx.stroke();
-
-      // Icon
-      ctx.font = `${18 * sx}px serif`;
-      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText(npc.icon, wx, wy);
+      if (npc.sprite) {
+        const img = getSprite(npc.sprite);
+        if (img.complete && img.naturalWidth > 0) {
+          const drawH = 52 * sy;
+          const drawW = (img.naturalWidth / img.naturalHeight) * drawH;
+          ctx.drawImage(img, wx - drawW / 2, wy + 16 * sy - drawH, drawW, drawH);
+        } else {
+          ctx.fillStyle = near ? '#ffee88' : '#ccaa44';
+          ctx.beginPath(); ctx.arc(wx, wy, 15 * sx, 0, Math.PI * 2); ctx.fill();
+          ctx.strokeStyle = '#ffd700'; ctx.lineWidth = 1.5; ctx.stroke();
+        }
+      } else {
+        // Body circle
+        ctx.fillStyle = near ? '#ffee88' : '#ccaa44';
+        ctx.beginPath(); ctx.arc(wx, wy, 15 * sx, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#ffd700'; ctx.lineWidth = 1.5; ctx.stroke();
+        // Icon
+        ctx.font = `${18 * sx}px serif`;
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(npc.icon, wx, wy);
+      }
 
       // Name
       ctx.fillStyle = '#ffd700'; ctx.font = `bold ${10 * sx}px Georgia`;
@@ -696,17 +708,31 @@ const World = (() => {
     ctx.fillStyle = 'rgba(0,0,0,0.4)';
     ctx.beginPath(); ctx.arc(bx, by + 22 * sy, 18 * sx, 0, Math.PI * 2); ctx.fill();
 
-    // Body
-    const near = Math.abs(p.x - WORLD_W / 2) < 60;
-    ctx.fillStyle = near ? '#ff5555' : '#cc1111';
-    ctx.beginPath(); ctx.arc(bx, by, 24 * sx, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = '#ff3333'; ctx.lineWidth = 2.5; ctx.stroke();
-
-    ctx.font = `${28 * sx}px serif`;
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillText(bossTemplate.icon, bx, by);
+    if (bossTemplate.sprite) {
+      const img = getSprite(bossTemplate.sprite);
+      if (img.complete && img.naturalWidth > 0) {
+        const drawH = 80 * sy;
+        const drawW = (img.naturalWidth / img.naturalHeight) * drawH;
+        ctx.drawImage(img, bx - drawW / 2, by + 22 * sy - drawH, drawW, drawH);
+      } else {
+        const near = Math.abs(p.x - WORLD_W / 2) < 60;
+        ctx.fillStyle = near ? '#ff5555' : '#cc1111';
+        ctx.beginPath(); ctx.arc(bx, by, 24 * sx, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#ff3333'; ctx.lineWidth = 2.5; ctx.stroke();
+      }
+    } else {
+      // Body
+      const near = Math.abs(p.x - WORLD_W / 2) < 60;
+      ctx.fillStyle = near ? '#ff5555' : '#cc1111';
+      ctx.beginPath(); ctx.arc(bx, by, 24 * sx, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = '#ff3333'; ctx.lineWidth = 2.5; ctx.stroke();
+      ctx.font = `${28 * sx}px serif`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(bossTemplate.icon, bx, by);
+    }
 
     ctx.fillStyle = '#ff4444'; ctx.font = `bold ${11 * sx}px Georgia`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText('⚠ BOSS: ' + bossTemplate.name, bx, by - 40 * sy);
   }
 

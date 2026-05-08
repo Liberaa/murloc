@@ -393,7 +393,20 @@ const UI = (() => {
     if (!dialog) return;
 
     document.getElementById('dialog-npc-name').textContent = dialog.npc;
-    document.getElementById('dialog-portrait').textContent = dialog.portrait;
+
+    // Portrait — use NPC sprite if available, else fall back to letter/emoji
+    const portraitEl = document.getElementById('dialog-portrait');
+    const npcData = ZONES.flatMap(z => z.npcs).find(n => n.dialog === dialogId);
+    if (npcData?.sprite) {
+      portraitEl.textContent = '';
+      portraitEl.style.backgroundImage = `url('/img/${npcData.sprite}')`;
+      portraitEl.style.backgroundSize = 'cover';
+      portraitEl.style.backgroundPosition = 'center top';
+    } else {
+      portraitEl.style.backgroundImage = '';
+      portraitEl.textContent = dialog.portrait;
+    }
+
     document.getElementById('dialog-text').textContent = dialog.lines[0];
 
     const actions = document.getElementById('dialog-actions');

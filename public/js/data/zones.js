@@ -15,9 +15,9 @@ const ZONES = [
     boss: null,
     bossDefeated: true,
     npcs: [
-      { id:'guard_leo', name:'Guard Leo', icon:'G', x:240, y:250, dialog:'start_quest_marsh_road', type:'quest' },
-      { id:'merchant_mira', name:'Mira the Merchant', icon:'M', x:410, y:220, type:'shop', shopId:'shop_greenwood' },
-      { id:'epic_vendor_lyra', name:'Lyra the Epic Vendor', icon:'E', x:570, y:230, type:'shop', shopId:'shop_greenwood_epics' }
+      { id:'guard_leo', name:'Guard Leo', icon:'G', x:240, y:250, dialog:'start_quest_marsh_road', type:'quest', sprite:'npcs/npc_00_06.png' },
+      { id:'merchant_mira', name:'Mira the Merchant', icon:'M', x:410, y:220, type:'shop', shopId:'shop_greenwood', sprite:'npcs/npc_04_06.png' },
+      { id:'epic_vendor_lyra', name:'Lyra the Epic Vendor', icon:'E', x:570, y:230, type:'shop', shopId:'shop_greenwood_epics', sprite:'npcs/npc_04_09.png' }
     ],
     exits: [
       { label:'<- Moonfall Hollow', toZone:'moonfall_hollow', x:50, y:300, unlockLevel:1 },
@@ -43,8 +43,8 @@ const ZONES = [
     boss: 'lunar_stag',
     bossDefeated: false,
     npcs: [
-      { id:'warden_selene', name:'Warden Selene', icon:'S', x:210, y:250, dialog:'start_quest_moonfall', type:'quest' },
-      { id:'relic_broker_nox', name:'Relic Broker Nox', icon:'N', x:430, y:225, type:'shop', shopId:'shop_moonfall' }
+      { id:'warden_selene', name:'Warden Selene', icon:'S', x:210, y:250, dialog:'start_quest_moonfall', type:'quest', sprite:'npcs/npc_00_06.png' },
+      { id:'relic_broker_nox', name:'Relic Broker Nox', icon:'N', x:430, y:225, type:'shop', shopId:'shop_moonfall', sprite:'npcs/npc_04_03.png' }
     ],
     exits: [
       { label:'<- Staffbreaker Peaks', toZone:'staffbreaker_peaks', x:50, y:300, unlockLevel:1 },
@@ -70,7 +70,7 @@ const ZONES = [
     bossOnly: true,
     bossDefeated: true,
     npcs: [
-      { id:'legend_keeper_oria', name:'Legend Keeper Oria', icon:'L', x:250, y:245, dialog:'start_quest_titan_crown', type:'quest' }
+      { id:'legend_keeper_oria', name:'Legend Keeper Oria', icon:'L', x:250, y:245, dialog:'start_quest_titan_crown', type:'quest', sprite:'npcs/npc_04_09.png' }
     ],
     exits: [
       { label:'<- Titan Crown Arena', toZone:'titan_crown_arena', x:50, y:300, unlockLevel:1 },
@@ -118,9 +118,9 @@ const ZONES = [
     boss: 'bogmother',
     bossDefeated: false,
     npcs: [
-      { id:'elder_finn', name:'Elder Finn', icon:'F', x:200, y:260, dialog:'start_quest_swamp', type:'quest' },
-      { id:'alchemist_ada', name:'Alchemist Ada', icon:'A', x:380, y:230, type:'shop', shopId:'shop_ashfen' },
-      { id:'reed_scout', name:'Reed Scout Toma', icon:'T', x:590, y:245, dialog:'start_quest_wraithlight', type:'quest' }
+      { id:'elder_finn', name:'Elder Finn', icon:'F', x:200, y:260, dialog:'start_quest_swamp', type:'quest', sprite:'npcs/npc_04_00.png' },
+      { id:'alchemist_ada', name:'Alchemist Ada', icon:'A', x:380, y:230, type:'shop', shopId:'shop_ashfen', sprite:'npcs/npc_04_06.png' },
+      { id:'reed_scout', name:'Reed Scout Toma', icon:'T', x:590, y:245, dialog:'start_quest_wraithlight', type:'quest', sprite:'npcs/npc_00_00.png' }
     ],
     exits: [
       { label:'<- Greenwood Vale', toZone:'greenwood', x:50, y:300, unlockLevel:1 },
@@ -145,9 +145,9 @@ const ZONES = [
     boss: 'the_iron_lich',
     bossDefeated: false,
     npcs: [
-      { id:'knight_vara', name:'Knight Vara', icon:'V', x:200, y:250, dialog:'start_quest_ruins', type:'quest' },
-      { id:'blacksmith_borin', name:'Borin the Smith', icon:'B', x:390, y:225, type:'shop', shopId:'shop_ironspire' },
-      { id:'archivist_ren', name:'Archivist Ren', icon:'A', x:590, y:240, dialog:'start_quest_shadow_pages', type:'quest' }
+      { id:'knight_vara', name:'Knight Vara', icon:'V', x:200, y:250, dialog:'start_quest_ruins', type:'quest', sprite:'npcs/npc_00_09.png' },
+      { id:'blacksmith_borin', name:'Borin the Smith', icon:'B', x:390, y:225, type:'shop', shopId:'shop_ironspire', sprite:'npcs/npc_00_03.png' },
+      { id:'archivist_ren', name:'Archivist Ren', icon:'A', x:590, y:240, dialog:'start_quest_shadow_pages', type:'quest', sprite:'npcs/npc_04_09.png' }
     ],
     exits: [
       { label:'<- Ashfen Marshes', toZone:'ashfen', x:50, y:300, unlockLevel:1 },
@@ -173,8 +173,8 @@ const ZONES = [
     boss: 'chaos_lord',
     bossDefeated: false,
     npcs: [
-      { id:'oracle_zyn', name:'Oracle Zyn', icon:'Z', x:200, y:250, dialog:'start_quest_chaos', type:'quest' },
-      { id:'vendor_chaos', name:'Chaos Vendor', icon:'C', x:390, y:225, type:'shop', shopId:'shop_chaos' }
+      { id:'oracle_zyn', name:'Oracle Zyn', icon:'Z', x:200, y:250, dialog:'start_quest_chaos', type:'quest', sprite:'npcs/npc_04_09.png' },
+      { id:'vendor_chaos', name:'Chaos Vendor', icon:'C', x:390, y:225, type:'shop', shopId:'shop_chaos', sprite:'npcs/npc_04_03.png' }
     ],
     exits: [
       { label:'<- Ironspire Ruins', toZone:'ironspire', x:50, y:300, unlockLevel:1 },
@@ -199,9 +199,9 @@ const ZONES = [
     boss: 'abyss_leviathan',
     bossDefeated: false,
     npcs: [
-      { id:'captain_nere', name:'Captain Nere', icon:'N', x:190, y:250, dialog:'start_quest_abyss', type:'quest' },
-      { id:'pearl_vendor', name:'Pearl Vendor Iri', icon:'I', x:385, y:225, type:'shop', shopId:'shop_abyss' },
-      { id:'tide_seer', name:'Tide-Seer Luma', icon:'L', x:590, y:245, dialog:'start_quest_leviathan', type:'quest' }
+      { id:'captain_nere', name:'Captain Nere', icon:'N', x:190, y:250, dialog:'start_quest_abyss', type:'quest', sprite:'npcs/npc_00_09.png' },
+      { id:'pearl_vendor', name:'Pearl Vendor Iri', icon:'I', x:385, y:225, type:'shop', shopId:'shop_abyss', sprite:'npcs/npc_04_06.png' },
+      { id:'tide_seer', name:'Tide-Seer Luma', icon:'L', x:590, y:245, dialog:'start_quest_leviathan', type:'quest', sprite:'npcs/npc_04_00.png' }
     ],
     exits: [
       { label:'<- Throne of Chaos', toZone:'chaos_throne', x:50, y:300, unlockLevel:1 }
@@ -225,9 +225,9 @@ const ZONES = [
     boss: 'grubtha_cave_matriarch',
     bossDefeated: false,
     npcs: [
-      { id:'miner_breck', name:'Miner Breck', icon:'⛏', x:185, y:250, dialog:'start_quest_cave_shadows', type:'quest' },
-      { id:'crystal_vendor_nix', name:'Nix the Crystal Vendor', icon:'💎', x:560, y:235, type:'shop', shopId:'shop_gloomcrag' },
-      { id:'boblin', name:'???', icon:'?', x:720, y:250, dialog:'boblin_dialog', type:'quest' }
+      { id:'miner_breck', name:'Miner Breck', icon:'⛏', x:185, y:250, dialog:'start_quest_cave_shadows', type:'quest', sprite:'npcs/npc_00_03.png' },
+      { id:'crystal_vendor_nix', name:'Nix the Crystal Vendor', icon:'💎', x:560, y:235, type:'shop', shopId:'shop_gloomcrag', sprite:'npcs/npc_04_03.png' },
+      { id:'boblin', name:'???', icon:'?', x:720, y:250, dialog:'boblin_dialog', type:'quest', sprite:'npcs/npc_00_00.png' }
     ],
     exits: [
       { label:'<- Cave Exit', toZone:'greenwood', x:50, y:300, unlockLevel:1 }
@@ -251,8 +251,8 @@ const ZONES = [
     boss: 'embrix_ashen_drake',
     bossDefeated: false,
     npcs: [
-      { id:'forge_keeper_hex', name:'Forge Keeper Hex', icon:'🔥', x:205, y:250, dialog:'start_quest_cinder_flames', type:'quest' },
-      { id:'cinder_vendor_mox', name:'Mox the Cinder Vendor', icon:'🪙', x:575, y:235, type:'shop', shopId:'shop_cinderpeak' }
+      { id:'forge_keeper_hex', name:'Forge Keeper Hex', icon:'🔥', x:205, y:250, dialog:'start_quest_cinder_flames', type:'quest', sprite:'npcs/npc_04_00.png' },
+      { id:'cinder_vendor_mox', name:'Mox the Cinder Vendor', icon:'🪙', x:575, y:235, type:'shop', shopId:'shop_cinderpeak', sprite:'npcs/npc_04_06.png' }
     ],
     exits: [
       { label:'<- Forge Exit', toZone:'ironspire', x:50, y:300, unlockLevel:1 }
